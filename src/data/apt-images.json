@@ -1,0 +1,71 @@
+{
+ "balcony-view": {
+  "w": 1220,
+  "h": 802,
+  "files": {
+   "480": "img/apt/balcony-view-480.webp",
+   "960": "img/apt/balcony-view-960.webp",
+   "1220": "img/apt/balcony-view-1220.webp",
+   "full": "img/apt/balcony-view-1220.webp"
+  }
+ },
+ "bedroom": {
+  "w": 1220,
+  "h": 799,
+  "files": {
+   "480": "img/apt/bedroom-480.webp",
+   "960": "img/apt/bedroom-960.webp",
+   "1220": "img/apt/bedroom-1220.webp",
+   "full": "img/apt/bedroom-1220.webp"
+  }
+ },
+ "courtyard-dusk": {
+  "w": 1220,
+  "h": 781,
+  "files": {
+   "480": "img/apt/courtyard-dusk-480.webp",
+   "960": "img/apt/courtyard-dusk-960.webp",
+   "1220": "img/apt/courtyard-dusk-1220.webp",
+   "full": "img/apt/courtyard-dusk-1220.webp"
+  }
+ },
+ "facade-pool": {
+  "w": 815,
+  "h": 1280,
+  "files": {
+   "480": "img/apt/facade-pool-480.webp",
+   "815": "img/apt/facade-pool-815.webp",
+   "full": "img/apt/facade-pool-815.webp"
+  }
+ },
+ "living-duplex": {
+  "w": 1220,
+  "h": 810,
+  "files": {
+   "480": "img/apt/living-duplex-480.webp",
+   "960": "img/apt/living-duplex-960.webp",
+   "1220": "img/apt/living-duplex-1220.webp",
+   "full": "img/apt/living-duplex-1220.webp"
+  }
+ },
+ "living-room": {
+  "w": 1220,
+  "h": 801,
+  "files": {
+   "480": "img/apt/living-room-480.webp",
+   "960": "img/apt/living-room-960.webp",
+   "1220": "img/apt/living-room-1220.webp",
+   "full": "img/apt/living-room-1220.webp"
+  }
+ },
+ "pool": {
+  "w": 1220,
+  "h": 810,
+  "files": {
+   "480": "img/apt/pool-480.webp",
+   "960": "img/apt/pool-960.webp",
+   "1220": "img/apt/pool-1220.webp",
+   "full": "img/apt/pool-1220.webp"
+  }
+ }
+}

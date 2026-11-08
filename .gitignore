@@ -1,0 +1,7 @@
+# Готовий сайт публікується окремо в гілку gh-pages (npm run deploy)
+dist/
+node_modules/
+.research/
+*.log
+.DS_Store
+Thumbs.db

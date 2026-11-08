@@ -1,0 +1,14 @@
+{
+  "name": "madeira-tour",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Сайт турів на Мадейру: 3D-глобус фото, маршрути, апартаменти, трансфер, яхта, бронювання (6 мов).",
+  "type": "module",
+  "scripts": {
+    "images": "python tools/images.py",
+    "build": "node build.mjs",
+    "all": "python tools/images.py && node build.mjs",
+    "serve": "python -m http.server 5240 --bind 127.0.0.1 --directory dist",
+    "deploy": "node build.mjs && node tools/deploy.mjs"
+  }
+}
