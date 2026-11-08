@@ -190,7 +190,7 @@ for (const L of cfg.langs) {
     places: places.map((p) => ({ id: p.id, t: S[p.id].t })),
     sphere: sphere.map((s) => ({ p: s.pi, s: s.img.sphereSet, src: s.img.thumb, full: s.img.full, tall: s.img.tall,
       credit: `${c.photo}: ${s.img.ph.author} · ${s.img.ph.license}`, page: s.img.ph.page })),
-    apts: apts.map((a) => ({ t: c.apts[a.src], full: base + a.img.full, src: base + a.img.mid })),
+    apts: apts.map((a) => ({ t: c.apts[a.src], d: c.aptsText?.[a.src] || "", full: base + a.img.full, src: base + a.img.mid })),
     aptWhere: c.stay.h2,
     routes: Object.fromEntries([...routes.map((r) => [r.id, c.trips[r.id].name]), ["custom", c.routes.custom]]),
     i18n: { add: c.add, added: c.added, menuOpen: c.menuOpen, menuClose: c.menuClose, plural: c.plural, book: c.book },

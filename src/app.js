@@ -131,9 +131,9 @@ function layout(force) {
   const w = innerWidth, h = innerHeight;
   if (!force && Math.abs(w - VW) < 20 && Math.abs(h - VH) < 20) return;
   VW = w; VH = h;
-  const fl = w <= 380 ? 120 : w <= 640 ? 130 : 170;
-  R = Math.max(fl, Math.min(560, h * (w <= 640 ? .52 : .5), w * .62));
-  CW = Math.round(Math.max(76, R * .46));
+  const fl = w <= 380 ? 110 : w <= 640 ? 120 : 160;
+  R = Math.max(fl, Math.min(520, h * (w <= 640 ? .46 : .45), w * (w <= 640 ? .5 : .56)));
+  CW = Math.round(Math.max(72, R * .47));
   persp = w <= 380 ? 620 : w <= 640 ? 760 : w <= 900 ? 920 : 1150;
   html.style.setProperty("--cw", CW + "px");
   html.style.setProperty("--persp", persp + "px");
@@ -150,8 +150,9 @@ const rotAxis = (x, y, z, a) => {
   const c = Math.cos(a), s = Math.sin(a), t = 1 - c;
   return [t * x * x + c, t * x * y - s * z, t * x * z + s * y, t * x * y + s * z, t * y * y + c, t * y * z - s * x, t * x * z - s * y, t * y * z + s * x, t * z * z + c];
 };
+const rotZ = (a) => { const c = Math.cos(a), s = Math.sin(a); return [c, -s, 0, s, c, 0, 0, 0, 1]; };
 const TILT = -12 * Math.PI / 180, K = .0023;
-let M = mul(rotY(-14 * Math.PI / 180), rotX(TILT)), camZ = 0, velX = 0, velY = 0, focused = -1, dragging = false, running = false, raf = 0;
+let M = mul(rotY(-14 * Math.PI / 180), rotX(TILT)), camZ = 0, velX = 0, velY = 0, velZ = 0, focused = -1, dragging = false, running = false, raf = 0;
 let idleAt = performance.now() + 1500, autoW = 0, lastT = 0, frames = 0;
 const zOf = (c) => M[6] * c.x - M[7] * c.y + M[8] * c.z;
 function frame() {
@@ -159,11 +160,12 @@ function frame() {
   const now = performance.now(), dt = Math.min(64, now - (lastT || now));
   lastT = now;
   if (!dragging && focused < 0) {
-    if (velX || velY) {
-      M = mul(rotX(velX), mul(rotY(velY), M));
-      velX *= .94; velY *= .94;
+    if (velX || velY || velZ) {
+      M = mul(rotZ(velZ), mul(rotX(velX), mul(rotY(velY), M)));
+      velX *= .94; velY *= .94; velZ *= .94;
       if (Math.abs(velX) < 2e-5) velX = 0;
       if (Math.abs(velY) < 2e-5) velY = 0;
+      if (Math.abs(velZ) < 2e-5) velZ = 0;
     }
     const want = !reduce.matches && now > idleAt + 3000 && isOn("revealed") ? 6e-5 : 0;
     autoW += (want - autoW) * .03;
@@ -191,38 +193,66 @@ function start() { if (!running) { running = true; lastT = 0; raf = requestAnima
 function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
 
 
-/* ===== Обертання: мишею, пальцем — у будь-який бік на 360° ===== */
-let ptr = null;
+/* ===== Обертання: одним пальцем або мишею — у будь-який бік на 360°;
+   двома пальцями — поворот навколо центру (перевернути «з ніг на голову»); на комп'ютері те саме — Shift + перетягування ===== */
+let ptr = null, twist = null;
+const pts = new Map();
+const pair = () => { const [p, q] = [...pts.values()]; return { a: Math.atan2(q.y - p.y, q.x - p.x), mx: (p.x + q.x) / 2, my: (p.y + q.y) / 2 }; };
 stage.addEventListener("pointerdown", (e) => {
   if (focused >= 0 || isOn("gridview") || (e.pointerType === "mouse" && e.button !== 0)) return;
-  const card = e.target.closest(".card"), onGlobe = !!card;
-  ptr = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, card, type: e.pointerType, active: e.pointerType !== "touch" || onGlobe, moved: 0 };
+  pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
   idleAt = performance.now();
-  if (ptr.active) { try { stage.setPointerCapture(e.pointerId); } catch (_) {} dragging = true; velX = velY = 0; start(); }
+  if (pts.size === 2) {
+    twist = pair(); ptr = null;
+    for (const id of pts.keys()) { try { stage.setPointerCapture(id); } catch (_) {} }
+    dragging = true; velX = velY = velZ = 0; start();
+    return;
+  }
+  if (pts.size > 2) return;
+  const card = e.target.closest(".card");
+  ptr = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, card, type: e.pointerType, active: e.pointerType !== "touch" || !!card, moved: 0 };
+  if (ptr.active) { try { stage.setPointerCapture(e.pointerId); } catch (_) {} dragging = true; velX = velY = velZ = 0; start(); }
 });
 stage.addEventListener("pointermove", (e) => {
+  const pt = pts.get(e.pointerId);
+  if (!pt) return;
+  pt.x = e.clientX; pt.y = e.clientY;
+  if (twist && pts.size >= 2) {
+    const g = pair();
+    let da = g.a - twist.a;
+    if (da > Math.PI) da -= 2 * Math.PI; else if (da < -Math.PI) da += 2 * Math.PI;
+    const ax = -(g.my - twist.my) * K, ay = (g.mx - twist.mx) * K;
+    M = mul(rotZ(da), mul(rotX(ax), mul(rotY(ay), M)));
+    velX = ax; velY = ay; velZ = da; twist = g; idleAt = performance.now();
+    return;
+  }
   if (!ptr || e.pointerId !== ptr.id) return;
   const tx = e.clientX - ptr.x0, ty = e.clientY - ptr.y0;
   ptr.moved = Math.max(ptr.moved, Math.hypot(tx, ty));
   if (!ptr.active) {
     if (Math.hypot(tx, ty) < 10) return;
     if (Math.abs(ty) > Math.abs(tx) * 1.15) { ptr = null; return; }
-    ptr.active = true; dragging = true; velX = velY = 0;
+    ptr.active = true; dragging = true; velX = velY = velZ = 0;
     try { stage.setPointerCapture(e.pointerId); } catch (_) {}
     start();
   }
   const dx = e.clientX - ptr.x, dy = e.clientY - ptr.y;
   ptr.x = e.clientX; ptr.y = e.clientY;
-  const ax = -dy * K, ay = dx * K;
-  M = mul(rotX(ax), mul(rotY(ay), M));
-  velX = ax; velY = ay; idleAt = performance.now();
+  if (e.shiftKey && e.pointerType === "mouse") {
+    const az = dx * K; M = mul(rotZ(az), M); velX = velY = 0; velZ = az;
+  } else {
+    const ax = -dy * K, ay = dx * K; M = mul(rotX(ax), mul(rotY(ay), M)); velX = ax; velY = ay; velZ = 0;
+  }
+  idleAt = performance.now();
 });
 const endDrag = (e) => {
+  if (!pts.delete(e.pointerId)) return;
+  if (twist) { if (pts.size < 2) { twist = null; ptr = null; dragging = false; idleAt = performance.now(); } return; }
   if (!ptr || e.pointerId !== ptr.id) return;
   const slop = ptr.type === "touch" || coarse.matches ? 14 : 6;
   const click = e.type === "pointerup" && ptr.moved < slop, card = ptr.card;
   dragging = false; ptr = null; idleAt = performance.now();
-  if (click) { velX = velY = 0; if (card) openShot(+card.dataset.idx, card); }
+  if (click) { velX = velY = velZ = 0; if (card) openShot(+card.dataset.idx, card); }
 };
 stage.addEventListener("pointerup", endDrag);
 stage.addEventListener("pointercancel", endDrag);
@@ -285,10 +315,30 @@ onScroll();
 setTimeout(reveal, hash ? 300 : seen ? 1400 : 3000);
 setTimeout(loadRest, 4500);
 
+/* ===== Кнопка «Назад» на телефоні: закриває фото, сітку чи меню й лишає на сайті ===== */
+const stack = [];
+let skipPop = 0, pendingBack = 0, backTimer = 0;
+if (history.state && history.state.ov) history.replaceState(null, "");
+function pushOv(name) { stack.push(name); try { history.pushState({ ov: name }, ""); } catch (_) {} }
+function dropOv(name) {
+  const i = stack.lastIndexOf(name);
+  if (i < 0) return;
+  stack.splice(i, 1); pendingBack++;
+  clearTimeout(backTimer);
+  backTimer = setTimeout(() => { const k = pendingBack; pendingBack = 0; skipPop++; history.go(-k); }, 0);
+}
+addEventListener("popstate", () => {
+  if (skipPop) { skipPop--; return; }
+  const top = stack.pop();
+  if (top === "lit") closeShot(true); else if (top === "menu") setMenu(false, true); else if (top === "grid") toggleGrid(false, true);
+});
+
 /* ===== Сітка ===== */
 const grid = $("#grid"), rows = $("#grid .rows"), gridBtn = $("#gridBtn");
 let gridBuilt = false;
-function toggleGrid(on = !isOn("gridview")) {
+function toggleGrid(on = !isOn("gridview"), fromPop = false) {
+  if (on === isOn("gridview")) return;
+  if (on) pushOv("grid"); else if (!fromPop) dropOv("grid");
   if (on && !gridBuilt) {
     gridBuilt = true;
     rows.innerHTML = S.map((p, i) => `<figure data-idx="${i}" tabindex="0" role="button" aria-label="${P[p.p].t}"><img src="${p.src}" srcset="${p.s}" sizes="(max-width:640px) 46vw, 280px" alt="" loading="lazy" decoding="async"><figcaption>${P[p.p].t}</figcaption></figure>`).join("");
@@ -320,11 +370,10 @@ function flip(el, out) {
   plate.style.transition = plate.style.transform = plate.style.opacity = "";
   return true;
 }
-function openShot(idx, el, kind = "sphere") {
-  const t = ++token;
-  clearTimeout(closeTimer);
-  srcEl = el; lastFocus = document.activeElement;
-  lit.classList.toggle("from-sphere", el.classList.contains("card"));
+const litCount = $("#litCount");
+let cur = null;
+shotImg.draggable = false;
+function fill(kind, idx, el, t) {
   if (kind === "sphere") {
     const s = S[idx], p = P[s.p], card = $(`.pcard[data-id="${p.id}"]`);
     litTitle.textContent = p.t;
@@ -333,32 +382,66 @@ function openShot(idx, el, kind = "sphere") {
     litFact.textContent = $(".pfact", card).lastChild.textContent;
     litCredit.innerHTML = `<a href="${s.page}" target="_blank" rel="noopener">${s.credit}</a>`;
     litWant.dataset.want = p.id;
+    litCount.textContent = `${idx + 1} / ${N}`;
     lit.classList.remove("lit-apt");
-    if (el.classList.contains("card")) focused = idx;
-    loadShot(el, s.full, t);
+    loadShot(el, s.src, s.full, t);
   } else {
     const a = D.apts[idx];
-    litTitle.textContent = a.t; litWhere.textContent = D.aptWhere; litNote.textContent = ""; litFact.textContent = ""; litCredit.textContent = "";
+    litTitle.textContent = a.t; litWhere.textContent = D.aptWhere; litNote.textContent = a.d || ""; litFact.textContent = ""; litCredit.textContent = "";
+    litCount.textContent = `${idx + 1} / ${D.apts.length}`;
     lit.classList.add("lit-apt");
-    loadShot(el, a.full, t);
+    loadShot(el, a.src, a.full, t);
   }
   syncWants();
+}
+function openShot(idx, el, kind = "sphere") {
+  const t = ++token;
+  clearTimeout(closeTimer);
+  if (!isOn("lit")) pushOv("lit");
+  srcEl = el; lastFocus = document.activeElement; cur = { kind, idx };
+  lit.classList.toggle("from-sphere", el.classList.contains("card"));
+  if (kind === "sphere" && el.classList.contains("card")) focused = idx;
+  fill(kind, idx, el, t);
   body.classList.add("lit"); lit.setAttribute("aria-hidden", "false"); lockScroll();
   lit.scrollTop = 0;
   if (!flip(el)) { plate.style.transition = plate.style.transform = plate.style.opacity = ""; }
   $(".xbtn", lit).focus({ preventScroll: true });
 }
-function loadShot(el, full, t) {
-  const small = el.querySelector("img");
-  shotImg.src = small && small.currentSrc ? small.currentSrc : full;
+// Гортання: свайп по фото, кнопки ‹ ›, стрілки на клавіатурі.
+function stepShot(d) {
+  if (!cur || !isOn("lit")) return;
+  const n = cur.kind === "apt" ? D.apts.length : N;
+  cur.idx = (cur.idx + d + n) % n;
+  if (focused >= 0) focused = cur.idx;
+  srcEl = cur.kind === "apt" ? $(`[data-apt="${cur.idx}"]`) : focused >= 0 ? cards[cur.idx].el : null;
+  shotImg.classList.add("swap");
+  fill(cur.kind, cur.idx, null, ++token);
+  lit.scrollTop = 0; idleAt = performance.now();
+}
+function loadShot(el, small, full, t) {
+  const im = el && el.querySelector("img"), first = im && im.currentSrc ? im.currentSrc : small;
+  let gotFull = false;
   shotImg.alt = litTitle.textContent;
+  if (el) shotImg.src = first;
+  else { const pre = new Image(); pre.onload = () => { if (t === token && !gotFull) { shotImg.src = first; shotImg.classList.remove("swap"); } }; pre.src = first; }
   const hi = new Image();
   hi.decoding = "async";
-  hi.onload = () => { if (t === token) shotImg.src = full; };
+  hi.onload = () => { if (t === token) { gotFull = true; shotImg.src = full; shotImg.classList.remove("swap"); } };
   hi.src = full;
 }
-function closeShot() {
+let sw = null;
+shot.addEventListener("pointerdown", (e) => { if (!e.target.closest("button")) sw = { id: e.pointerId, x: e.clientX, y: e.clientY }; });
+shot.addEventListener("pointerup", (e) => {
+  if (!sw || e.pointerId !== sw.id) return;
+  const dx = e.clientX - sw.x, dy = e.clientY - sw.y;
+  sw = null;
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) stepShot(dx < 0 ? 1 : -1);
+});
+shot.addEventListener("pointercancel", () => { sw = null; });
+lit.addEventListener("click", (e) => { const b = e.target.closest("[data-step-shot]"); if (b) stepShot(+b.dataset.stepShot); });
+function closeShot(fromPop = false) {
   if (!isOn("lit")) return;
+  if (!fromPop) dropOv("lit");
   focused = -1; token++; idleAt = performance.now();
   body.classList.remove("lit"); lit.setAttribute("aria-hidden", "true");
   if (!(srcEl && document.contains(srcEl) && srcEl.offsetParent !== null && flip(srcEl, true))) plate.style.opacity = "0";
@@ -372,7 +455,9 @@ $$("[data-apt]").forEach((b) => b.addEventListener("click", () => openShot(+b.da
 
 /* ===== Меню і мови ===== */
 const menu = $("#menu"), menuBtn = $("#menuBtn"), langs = $(".langs");
-function setMenu(open) {
+function setMenu(open, fromPop = false) {
+  if (open === isOn("menuopen")) return;
+  if (open) pushOv("menu"); else if (!fromPop) dropOv("menu");
   body.classList.toggle("menuopen", open);
   menu.setAttribute("aria-hidden", String(!open));
   menuBtn.setAttribute("aria-expanded", String(open));
@@ -393,6 +478,7 @@ menu.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => { if (langs && langs.open && !e.target.closest(".langs")) langs.open = false; });
 $(".wordmark").addEventListener("click", (e) => { e.preventDefault(); setMenu(false); if (isOn("gridview")) toggleGrid(false); scrollTo({ top: 0, behavior: reduce.matches ? "auto" : "smooth" }); });
 addEventListener("keydown", (e) => {
+  if (isOn("lit") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { e.preventDefault(); stepShot(e.key === "ArrowRight" ? 1 : -1); return; }
   if (e.key !== "Escape") return;
   if (langs && langs.open) langs.open = false;
   else if (isOn("lit")) closeShot(); else if (isOn("menuopen")) { setMenu(false); menuBtn.focus(); } else if (isOn("gridview")) toggleGrid(false);
@@ -423,8 +509,28 @@ $$(".chip[data-filter]").forEach((ch) => ch.addEventListener("click", () => {
   const f = ch.dataset.filter;
   $$(".chip[data-filter]").forEach((c) => c.setAttribute("aria-pressed", String(c === ch)));
   $$(".pcard", atlas).forEach((c) => { c.hidden = f !== "all" && c.dataset.region !== f; });
-  atlas.scrollLeft = 0;
+  atlas.scrollLeft = 0; atlasCount();
 }));
+// Лічильник «3 / 21» під стрічкою атласу на телефоні.
+const aIdx = $("#aIdx"), aTot = $("#aTot");
+function atlasCount() {
+  const vis = $$(".pcard", atlas).filter((c) => !c.hidden);
+  aTot.textContent = vis.length;
+  if (!vis.length) return;
+  const step = vis[0].getBoundingClientRect().width + 14;
+  aIdx.textContent = clamp(Math.round(atlas.scrollLeft / step) + 1, 1, vis.length);
+}
+atlas.addEventListener("scroll", atlasCount, { passive: true });
+
+/* ===== Підказка жестів на телефоні — один раз ===== */
+const hint = $("#hint");
+if (hint && coarse.matches && !store.get("mt-hint", false)) {
+  let hid = false;
+  const hide = () => { if (hid) return; hid = true; hint.classList.remove("on"); store.set("mt-hint", true); };
+  const show = () => { if (hid) return; if (!isOn("revealed")) { setTimeout(show, 300); return; } hint.classList.add("on"); setTimeout(hide, 5200); };
+  setTimeout(show, 900);
+  stage.addEventListener("pointerdown", hide, { once: true });
+}
 const ids = new Set(P.map((p) => p.id));
 let wants = new Set(store.get("mt-wants", []).filter((id) => ids.has(id)));
 function syncWants() {

@@ -111,6 +111,18 @@ export default {
     pool: "Der Pool im Innenhof", "facade-pool": "Das Haus spiegelt sich im Pool", "balcony-view": "Blick auf die Bucht von Funchal",
     "living-duplex": "Wohnzimmer mit Zugang zum Balkon", "courtyard-dusk": "Der Innenhof am Abend", "living-room": "Wohn- und Essbereich", bedroom: "Schlafzimmer"
   },
+  hint: "Wischen zum Drehen · mit zwei Fingern kippen",
+  prevPhoto: "Vorheriges Foto",
+  nextPhoto: "Nächstes Foto",
+  aptsText: {
+    "pool": "Der Pool ist von Sonnenliegen und tropischem Grün umgeben. Morgens ist es hier ruhig und kühl, nachmittags entspannt man nach einem Ausflug, ohne das Haus zu verlassen.",
+    "facade-pool": "Eine mintgrüne Fassade im klassischen madeirischen Stil, daneben der Pool, in dem sich Fenster und Himmel spiegeln.",
+    "balcony-view": "Vom Balkon blicken Sie auf das Amphitheater von Funchal und den Ozean – ideal zum Frühstück und um abends zu sehen, wie die Lichter der Stadt angehen.",
+    "living-duplex": "Ein helles Wohnzimmer mit Essbereich und großen Schiebetüren zum Balkon mit Blick auf Stadt und Berge.",
+    "courtyard-dusk": "Abends wird der Innenhof beleuchtet, und die Liegen am Pool unter Mauern aus Vulkangestein werden zum gemütlichsten Ort, um einen Inseltag ausklingen zu lassen.",
+    "living-room": "Ein geräumiges Wohnzimmer mit Sofa, Esstisch und Küchenzeile – bequem, um sich als ganze Gruppe zu treffen.",
+    "bedroom": "Ein gemütliches Schlafzimmer mit Doppelbett und Schrank; dichte Vorhänge lassen Sie ausschlafen, selbst nach einem frühen Sonnenaufgang am Arieiro."
+  },
   spots: {
     arieiro: { t: "Pico do Arieiro", area: "Zentralmassiv · 1.818 m",
       story: "Die Straße führt fast bis zum Gipfel, ein Sonnenaufgang über dem Wolkenmeer erfordert also keinen harten Aufstieg. Hier beginnt auch der berühmte PR1: ein Gratweg mit Tunneln und Steinstufen hinüber zum Pico Ruivo.",

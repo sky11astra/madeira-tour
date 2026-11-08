@@ -322,6 +322,18 @@ export default {
     "living-room": "Living and dining area",
     "bedroom": "Bedroom"
   },
+  "hint": "Swipe to spin · twist with two fingers to flip",
+  "prevPhoto": "Previous photo",
+  "nextPhoto": "Next photo",
+  "aptsText": {
+    "pool": "The pool is framed by sun loungers and tropical greenery. Mornings here are quiet and cool, and in the afternoon it is the place to unwind after an excursion without leaving home.",
+    "facade-pool": "A mint-green façade in classic Madeiran style, with the pool beside it reflecting the windows and the sky.",
+    "balcony-view": "From the balcony you see Funchal’s amphitheatre of hills and the ocean. A good spot for breakfast, and for watching the city lights come on in the evening.",
+    "living-duplex": "A bright living room with a dining area and wide sliding doors onto a balcony overlooking the city and the mountains.",
+    "courtyard-dusk": "In the evening the courtyard lights up, and the loungers by the pool, beneath walls of volcanic stone, become the cosiest place to end a day on the island.",
+    "living-room": "A spacious living room with a sofa, dining table and kitchenette, so the whole group can gather in one place.",
+    "bedroom": "A cosy bedroom with a double bed and wardrobe; heavy curtains let you sleep in, even after an early sunrise on Arieiro."
+  },
   "spots": {
     "arieiro": {
       "t": "Pico do Arieiro",

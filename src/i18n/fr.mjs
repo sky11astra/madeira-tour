@@ -111,6 +111,18 @@ export default {
     pool: "La piscine de la cour", "facade-pool": "La maison se reflète dans la piscine", "balcony-view": "Vue sur la baie de Funchal",
     "living-duplex": "Séjour avec accès au balcon", "courtyard-dusk": "La cour au crépuscule", "living-room": "Séjour et coin repas", bedroom: "Chambre"
   },
+  hint: "Glissez pour tourner · à deux doigts pour retourner",
+  prevPhoto: "Photo précédente",
+  nextPhoto: "Photo suivante",
+  aptsText: {
+    "pool": "La piscine est entourée de transats et de verdure tropicale. Le matin, tout est calme et frais\u00a0; l’après-midi, on s’y détend après une excursion sans quitter la maison.",
+    "facade-pool": "Une façade vert menthe de style madérien classique, et à côté la piscine où se reflètent les fenêtres et le ciel.",
+    "balcony-view": "Depuis le balcon, on voit l’amphithéâtre de Funchal et l’océan. Idéal pour le petit-déjeuner, et le soir pour voir s’allumer les lumières de la ville.",
+    "living-duplex": "Un séjour lumineux avec coin repas et grandes baies coulissantes ouvrant sur un balcon face à la ville et aux montagnes.",
+    "courtyard-dusk": "Le soir, la cour s’illumine, et les transats au bord de la piscine, sous des murs de pierre volcanique, deviennent l’endroit le plus douillet pour finir la journée sur l’île.",
+    "living-room": "Un séjour spacieux avec canapé, table à manger et kitchenette, pour réunir tout le groupe.",
+    "bedroom": "Une chambre douillette avec lit double et armoire\u00a0; d’épais rideaux permettent de dormir tard, même après un lever de soleil matinal à l’Arieiro."
+  },
   spots: {
     arieiro: { t: "Pico do Arieiro", area: "Massif central · 1 818 m",
       story: "La route monte presque jusqu’au sommet : un lever de soleil au-dessus d’une mer de nuages ne demande donc aucune ascension difficile. C’est aussi le départ du célèbre PR1, un sentier de crête avec tunnels et marches de pierre jusqu’au Pico Ruivo.",

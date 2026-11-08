@@ -156,6 +156,7 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
 <p class="colophon chrome">${esc(c.colophon)}</p>
 <button id="gridBtn" class="gridbtn" type="button" aria-label="${esc(c.gridAria)}" aria-pressed="false"><b></b><b></b><b></b><b></b></button>
 <div class="cue chrome" aria-hidden="true"><s></s>${esc(c.cue)}</div>
+<p class="hint" id="hint" aria-hidden="true">${esc(c.hint)}</p>
 <a class="down chrome" href="#services" aria-label="${esc(c.nav[0][1])}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5 12 15.5l6-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
 
 <main id="main">
@@ -182,6 +183,7 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
       <div class="filters" role="group" aria-label="${esc(c.places.label)}">${filters}<p class="wantcount" aria-live="polite"><b id="wantN">0</b>${esc(c.places.counter)}</p></div>
       <div class="atlas" id="atlas">${atlas}
       </div>
+      <p class="acount" aria-hidden="true"><b id="aIdx">1</b> / <span id="aTot">${places.length}</span></p>
     </div>
   </section>
 
@@ -343,13 +345,15 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
 <div id="lit" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="litTitle">
   <div class="scrim" data-close></div>
   <div class="plate">
-    <div class="shot"><img alt="" decoding="async"><button class="xbtn" type="button" data-close>${esc(c.close)}</button></div>
+    <div class="shot"><img alt="" decoding="async"><button class="xbtn" type="button" data-close>${esc(c.close)}</button>
+      <button class="lnav prev" type="button" data-step-shot="-1" aria-label="${esc(c.prevPhoto)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="lnav next" type="button" data-step-shot="1" aria-label="${esc(c.nextPhoto)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
     <div class="meta">
       <div><h2 id="litTitle"></h2><p class="where" id="litWhere"></p></div>
       <div>
         <p class="note" id="litNote"></p>
         <p class="lfact" id="litFact"></p>
-        <div class="lfoot"><p class="credit" id="litCredit"></p><button class="want" type="button" id="litWant" data-want="" aria-pressed="false">${heart}<span>${esc(c.add)}</span></button></div>
+        <div class="lfoot"><p class="credit"><span class="lcount" id="litCount"></span><span id="litCredit"></span></p><button class="want" type="button" id="litWant" data-want="" aria-pressed="false">${heart}<span>${esc(c.add)}</span></button></div>
       </div>
     </div>
   </div>

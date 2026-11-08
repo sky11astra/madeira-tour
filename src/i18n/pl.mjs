@@ -111,6 +111,18 @@ export default {
     pool: "Basen na dziedzińcu", "facade-pool": "Dom odbija się w basenie", "balcony-view": "Widok na zatokę Funchal",
     "living-duplex": "Salon z wyjściem na balkon", "courtyard-dusk": "Dziedziniec wieczorem", "living-room": "Salon z jadalnią", bedroom: "Sypialnia"
   },
+  hint: "Przesuń, aby obrócić · dwoma palcami – odwróć",
+  prevPhoto: "Poprzednie zdjęcie",
+  nextPhoto: "Następne zdjęcie",
+  aptsText: {
+    "pool": "Basen otaczają leżaki i tropikalna zieleń. Rano jest tu cicho i chłodno, a po południu można odpocząć po wycieczce, nie wychodząc z domu.",
+    "facade-pool": "Miętowa fasada w klasycznym maderskim stylu, a obok basen, w którym odbijają się okna i niebo.",
+    "balcony-view": "Z balkonu widać amfiteatr Funchal i ocean. Dobre miejsce na śniadanie i na wieczór, gdy zapalają się światła miasta.",
+    "living-duplex": "Jasny salon z jadalnią i dużymi przesuwnymi drzwiami na balkon z widokiem na miasto i góry.",
+    "courtyard-dusk": "Wieczorem dziedziniec jest podświetlony, a leżaki przy basenie pod murami z wulkanicznego kamienia stają się najprzytulniejszym miejscem na koniec dnia na wyspie.",
+    "living-room": "Przestronny salon z sofą, stołem i aneksem kuchennym – wygodnie spotkać się całą grupą.",
+    "bedroom": "Przytulna sypialnia z podwójnym łóżkiem i szafą; grube zasłony pozwalają się wyspać nawet po wczesnym wschodzie słońca na Arieiro."
+  },
   spots: {
     arieiro: { t: "Pico do Arieiro", area: "Masyw centralny · 1818 m",
       story: "Droga prowadzi prawie na sam szczyt, więc wschód słońca nad morzem chmur nie wymaga ciężkiej wspinaczki. Tu zaczyna się też słynny szlak PR1 – grań z tunelami i kamiennymi schodami aż na Pico Ruivo.",
