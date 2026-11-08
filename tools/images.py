@@ -65,3 +65,24 @@ ic.resize((180, 180), Image.LANCZOS).save(OUT / "apple-touch-icon.png", optimize
 
 total = sum(p.stat().st_size for p in OUT.rglob("*") if p.is_file())
 print(f"OK: dist/img = {total / 1024:.0f} KB")
+
+# Фото локацій (завантажені tools/fetch_photos.py) -> WebP кількох ширин для глобуса, атласу й перегляду
+PSRC = ROOT / "assets" / "photos"
+POUT = OUT / "photos"
+POUT.mkdir(parents=True, exist_ok=True)
+pman, psize = {}, 0
+for f in sorted(PSRC.glob("*.jpg")):
+    im = ImageOps.exif_transpose(Image.open(f)).convert("RGB")
+    key, (w, h) = f.stem, im.size
+    files = {}
+    for tw in (280, 560, 960, 1280):
+        tw = min(tw, w)
+        if str(tw) in files:
+            continue
+        out = POUT / f"{key}-{tw}.webp"
+        im.resize((tw, round(h * tw / w)), Image.LANCZOS).save(out, "WEBP", quality=78 if tw <= 560 else 80, method=6)
+        files[str(tw)] = f"img/photos/{out.name}"
+        psize += out.stat().st_size
+    pman[key] = {"w": w, "h": h, "files": files}
+(ROOT / "src" / "data" / "photo-files.json").write_text(json.dumps(pman, indent=1), encoding="utf-8")
+print(f"photos: {len(pman)} -> WebP {psize / 1024 / 1024:.1f} MB total")

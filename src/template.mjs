@@ -6,7 +6,7 @@ const plane = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 15.2v-
 const chev = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
 
 export function render(ctx) {
-  const { lang, c, cfg, base, places, routes, apts, mapSvg, jsonLd, urls, css, js, data, credits, yacht, mainIdx } = ctx;
+  const { lang, c, cfg, base, places, routes, apts, mapSvg, jsonLd, urls, css, js, data, credits, yacht, mainIdx, remote } = ctx;
   const brand = cfg.brand, S = c.spots, T = c.trips;
   const t = (s) => esc(String(s).replace(/\{brand\}/g, brand));
   const name = (id) => S[id]?.t || c.stops[id] || id;
@@ -108,7 +108,7 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${base}img/apple-touch-icon.png">
 <link rel="manifest" href="${base}site.webmanifest">
-<link rel="preconnect" href="https://upload.wikimedia.org">
+${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&amp;family=Inter:wght@300;400;500&amp;display=swap">

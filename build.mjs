@@ -27,10 +27,19 @@ const wmSet = (ph, ws) => {
   for (const w of ws) { if (ph.w <= w) { out.push(`${ph.url} ${ph.w}w`); break; } out.push(`${wm(ph, w)} ${w}w`); }
   return out.join(", ");
 };
-const img = (ph) => ({ ph, sphereSet: wmSet(ph, [250, 330, 500]), thumb: wm(ph, 330), card: wm(ph, 500), cardSet: wmSet(ph, [330, 500, 960]), full: wm(ph, 1280), big: wm(ph, 960), tall: ph.h > ph.w * 1.15 });
-for (const p of places) p.img = img(photos[p.photo]);
+// Власні WebP (tools/fetch_photos.py + tools/images.py) мають пріоритет; якщо їх нема — фото з Wikimedia.
+const local = existsSync(join(ROOT, "src/data/photo-files.json")) ? JSON.parse(read("src/data/photo-files.json")) : {};
+const imgFor = (key, base = "") => {
+  const ph = photos[key], L = local[key];
+  if (!L) return { ph, sphereSet: wmSet(ph, [250, 330, 500]), thumb: wm(ph, 330), card: wm(ph, 500), cardSet: wmSet(ph, [330, 500, 960]), full: wm(ph, 1280), big: wm(ph, 960), mid: wm(ph, 960), midSet: wmSet(ph, [500, 960, 1280]) };
+  const ws = Object.keys(L.files).map(Number).sort((a, b) => a - b), f = (w) => base + L.files[String(w)];
+  const pick = (want) => ws.find((w) => w >= want) || ws.at(-1);
+  const set = (list) => [...new Set(list.map(pick))].map((w) => `${f(w)} ${w}w`).join(", ");
+  return { ph, sphereSet: set([280, 560]), thumb: f(pick(280)), card: f(pick(560)), cardSet: set([280, 560, 960]), full: f(ws.at(-1)),
+    big: `${cfg.siteUrl}/${L.files[String(pick(960))]}`, mid: f(pick(960)), midSet: set([560, 960, 1280]) };
+};
+const remote = Object.keys(photos).some((k) => !local[k]);
 const yachtPh = photos.yacht;
-const yacht = { mid: wm(yachtPh, 960), set: wmSet(yachtPh, [500, 960, 1280]) };
 
 /* ---------- Глобус: усі фото (головні + додаткові), перемішані так, щоб фото одного місця не стояли поруч ---------- */
 function rng(a) { return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -44,7 +53,6 @@ for (let seed = 1; seed < 600 && bestC > 0; seed++) {
   for (let i = 0; i < a.length; i++) for (const d of [1, 2, 3, 5, 8, 13]) if (i + d < a.length && a[i].pi === a[i + d].pi) c++;
   if (c < bestC) { bestC = c; sphere = a; }
 }
-sphere = sphere.map((s) => ({ ...s, img: img(photos[s.key]) }));
 const mainIdx = Object.fromEntries(places.map((p) => [p.id, sphere.findIndex((s) => s.key === p.photo)]));
 
 /* ---------- Карта: проєкція і SVG ---------- */
@@ -152,7 +160,7 @@ function jsonLd(lang) {
       geo: { "@type": "GeoCoordinates", latitude: 32.7607, longitude: -16.9595 },
       includesAttraction: places.map((p) => ({ "@type": "TouristAttraction", name: S[p.id].t, description: `${S[p.id].story} ${S[p.id].fact}`,
         geo: { "@type": "GeoCoordinates", latitude: p.lat, longitude: p.lon },
-        image: [p.img.big, ...(more[p.id] || []).map((k) => wm(photos[k], 960))] }))
+        image: [p.img.big, ...(more[p.id] || []).map((k) => imgFor(k).big)] }))
     },
     ...routes.map((r) => {
       const T = c.trips[r.id];
@@ -178,17 +186,20 @@ const rel = (from, to) => (from.dir ? "../" : "") + to.dir || "./";
 mkdirSync(DIST, { recursive: true });
 for (const L of cfg.langs) {
   const lang = L.code, c = packs[lang], base = L.dir ? "../" : "", S = c.spots;
+  for (const p of places) p.img = imgFor(p.photo, base);
+  const sph = sphere.map((s) => ({ ...s, img: imgFor(s.key, base) }));
+  const y = imgFor("yacht", base), yacht = { mid: y.mid, set: y.midSet };
   const urls = { abs: Object.fromEntries(LANGS.map((x) => [x, pageUrl(x)])), rel: Object.fromEntries(cfg.langs.map((x) => [x.code, rel(L, x) || "./"])) };
   const apts = apartments.map((a) => {
     const im = aptImgs[a.src];
     return { ...a, img: { mid: im.files["960"] || im.files.full, set: Object.entries(im.files).filter(([k]) => k !== "full").map(([w, f]) => `${base}${f} ${w}w`).join(", "), full: im.files.full } };
   });
-  const credits = [...sphere.map((s) => [S[places[s.pi].id].t, s.img.ph]), [c.yachtCredit, yachtPh]]
+  const credits = [...sph.map((s) => [S[places[s.pi].id].t, s.img.ph]), [c.yachtCredit, yachtPh]]
     .map(([n, ph]) => `<li>${esc(n)} — <a href="${esc(ph.page)}" rel="noopener" target="_blank">${esc(ph.author)}</a>, ${esc(ph.license)}</li>`).join("");
   const data = JSON.stringify({
     lang, locale: L.locale,
     places: places.map((p) => ({ id: p.id, t: S[p.id].t })),
-    sphere: sphere.map((s) => ({ p: s.pi, s: s.img.sphereSet, src: s.img.thumb, full: s.img.full, tall: s.img.tall,
+    sphere: sph.map((s) => ({ p: s.pi, s: s.img.sphereSet, src: s.img.thumb, full: s.img.full,
       credit: `${c.photo}: ${s.img.ph.author} · ${s.img.ph.license}`, page: s.img.ph.page })),
     apts: apts.map((a) => ({ t: c.apts[a.src], d: c.aptsText?.[a.src] || "", full: base + a.img.full, src: base + a.img.mid })),
     aptWhere: c.stay.h2,
@@ -196,7 +207,7 @@ for (const L of cfg.langs) {
     i18n: { add: c.add, added: c.added, menuOpen: c.menuOpen, menuClose: c.menuClose, plural: c.plural, book: c.book },
     contacts: cfg.contacts, endpoint: cfg.formEndpoint
   }).replace(/</g, "\\u003c");
-  const html = render({ lang, c, cfg, base, places, routes, apts, mapSvg: mapSvg(c), jsonLd: jsonLd(lang), urls, css, js, data, credits, yacht, mainIdx, pinName: PIN[lang] });
+  const html = render({ lang, c, cfg, base, places, routes, apts, mapSvg: mapSvg(c), jsonLd: jsonLd(lang), urls, css, js, data, credits, yacht, mainIdx, remote, pinName: PIN[lang] });
   const out = join(DIST, L.dir, "index.html");
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, html);

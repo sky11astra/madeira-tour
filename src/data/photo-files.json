@@ -1,0 +1,502 @@
+{
+ "arieiro": {
+  "w": 1280,
+  "h": 438,
+  "files": {
+   "280": "img/photos/arieiro-280.webp",
+   "560": "img/photos/arieiro-560.webp",
+   "960": "img/photos/arieiro-960.webp",
+   "1280": "img/photos/arieiro-1280.webp"
+  }
+ },
+ "arieiro_2": {
+  "w": 1280,
+  "h": 517,
+  "files": {
+   "280": "img/photos/arieiro_2-280.webp",
+   "560": "img/photos/arieiro_2-560.webp",
+   "960": "img/photos/arieiro_2-960.webp",
+   "1280": "img/photos/arieiro_2-1280.webp"
+  }
+ },
+ "arieiro_3": {
+  "w": 1280,
+  "h": 788,
+  "files": {
+   "280": "img/photos/arieiro_3-280.webp",
+   "560": "img/photos/arieiro_3-560.webp",
+   "960": "img/photos/arieiro_3-960.webp",
+   "1280": "img/photos/arieiro_3-1280.webp"
+  }
+ },
+ "balcoes": {
+  "w": 1280,
+  "h": 623,
+  "files": {
+   "280": "img/photos/balcoes-280.webp",
+   "560": "img/photos/balcoes-560.webp",
+   "960": "img/photos/balcoes-960.webp",
+   "1280": "img/photos/balcoes-1280.webp"
+  }
+ },
+ "balcoes_2": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/balcoes_2-280.webp",
+   "560": "img/photos/balcoes_2-560.webp",
+   "960": "img/photos/balcoes_2-960.webp",
+   "1280": "img/photos/balcoes_2-1280.webp"
+  }
+ },
+ "botanico": {
+  "w": 1280,
+  "h": 960,
+  "files": {
+   "280": "img/photos/botanico-280.webp",
+   "560": "img/photos/botanico-560.webp",
+   "960": "img/photos/botanico-960.webp",
+   "1280": "img/photos/botanico-1280.webp"
+  }
+ },
+ "botanico_2": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/botanico_2-280.webp",
+   "560": "img/photos/botanico_2-560.webp",
+   "960": "img/photos/botanico_2-960.webp",
+   "1280": "img/photos/botanico_2-1280.webp"
+  }
+ },
+ "botanico_3": {
+  "w": 1280,
+  "h": 720,
+  "files": {
+   "280": "img/photos/botanico_3-280.webp",
+   "560": "img/photos/botanico_3-560.webp",
+   "960": "img/photos/botanico_3-960.webp",
+   "1280": "img/photos/botanico_3-1280.webp"
+  }
+ },
+ "caldeirao": {
+  "w": 1280,
+  "h": 1927,
+  "files": {
+   "280": "img/photos/caldeirao-280.webp",
+   "560": "img/photos/caldeirao-560.webp",
+   "960": "img/photos/caldeirao-960.webp",
+   "1280": "img/photos/caldeirao-1280.webp"
+  }
+ },
+ "caldeirao_2": {
+  "w": 1280,
+  "h": 1927,
+  "files": {
+   "280": "img/photos/caldeirao_2-280.webp",
+   "560": "img/photos/caldeirao_2-560.webp",
+   "960": "img/photos/caldeirao_2-960.webp",
+   "1280": "img/photos/caldeirao_2-1280.webp"
+  }
+ },
+ "camara": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/camara-280.webp",
+   "560": "img/photos/camara-560.webp",
+   "960": "img/photos/camara-960.webp",
+   "1280": "img/photos/camara-1280.webp"
+  }
+ },
+ "camara_2": {
+  "w": 1280,
+  "h": 628,
+  "files": {
+   "280": "img/photos/camara_2-280.webp",
+   "560": "img/photos/camara_2-560.webp",
+   "960": "img/photos/camara_2-960.webp",
+   "1280": "img/photos/camara_2-1280.webp"
+  }
+ },
+ "curral": {
+  "w": 1280,
+  "h": 511,
+  "files": {
+   "280": "img/photos/curral-280.webp",
+   "560": "img/photos/curral-560.webp",
+   "960": "img/photos/curral-960.webp",
+   "1280": "img/photos/curral-1280.webp"
+  }
+ },
+ "curral_2": {
+  "w": 1280,
+  "h": 832,
+  "files": {
+   "280": "img/photos/curral_2-280.webp",
+   "560": "img/photos/curral_2-560.webp",
+   "960": "img/photos/curral_2-960.webp",
+   "1280": "img/photos/curral_2-1280.webp"
+  }
+ },
+ "desertas": {
+  "w": 1280,
+  "h": 960,
+  "files": {
+   "280": "img/photos/desertas-280.webp",
+   "560": "img/photos/desertas-560.webp",
+   "960": "img/photos/desertas-960.webp",
+   "1280": "img/photos/desertas-1280.webp"
+  }
+ },
+ "desertas_2": {
+  "w": 1280,
+  "h": 731,
+  "files": {
+   "280": "img/photos/desertas_2-280.webp",
+   "560": "img/photos/desertas_2-560.webp",
+   "960": "img/photos/desertas_2-960.webp",
+   "1280": "img/photos/desertas_2-1280.webp"
+  }
+ },
+ "fanal": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/fanal-280.webp",
+   "560": "img/photos/fanal-560.webp",
+   "960": "img/photos/fanal-960.webp",
+   "1280": "img/photos/fanal-1280.webp"
+  }
+ },
+ "fanal_2": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/fanal_2-280.webp",
+   "560": "img/photos/fanal_2-560.webp",
+   "960": "img/photos/fanal_2-960.webp",
+   "1280": "img/photos/fanal_2-1280.webp"
+  }
+ },
+ "fanal_3": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/fanal_3-280.webp",
+   "560": "img/photos/fanal_3-560.webp",
+   "960": "img/photos/fanal_3-960.webp",
+   "1280": "img/photos/fanal_3-1280.webp"
+  }
+ },
+ "girao": {
+  "w": 1280,
+  "h": 720,
+  "files": {
+   "280": "img/photos/girao-280.webp",
+   "560": "img/photos/girao-560.webp",
+   "960": "img/photos/girao-960.webp",
+   "1280": "img/photos/girao-1280.webp"
+  }
+ },
+ "girao_2": {
+  "w": 1280,
+  "h": 842,
+  "files": {
+   "280": "img/photos/girao_2-280.webp",
+   "560": "img/photos/girao_2-560.webp",
+   "960": "img/photos/girao_2-960.webp",
+   "1280": "img/photos/girao_2-1280.webp"
+  }
+ },
+ "janela": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/janela-280.webp",
+   "560": "img/photos/janela-560.webp",
+   "960": "img/photos/janela-960.webp",
+   "1280": "img/photos/janela-1280.webp"
+  }
+ },
+ "janela_2": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/janela_2-280.webp",
+   "560": "img/photos/janela_2-560.webp",
+   "960": "img/photos/janela_2-960.webp",
+   "1280": "img/photos/janela_2-1280.webp"
+  }
+ },
+ "janela_3": {
+  "w": 1280,
+  "h": 1920,
+  "files": {
+   "280": "img/photos/janela_3-280.webp",
+   "560": "img/photos/janela_3-560.webp",
+   "960": "img/photos/janela_3-960.webp",
+   "1280": "img/photos/janela_3-1280.webp"
+  }
+ },
+ "lourenco": {
+  "w": 1280,
+  "h": 585,
+  "files": {
+   "280": "img/photos/lourenco-280.webp",
+   "560": "img/photos/lourenco-560.webp",
+   "960": "img/photos/lourenco-960.webp",
+   "1280": "img/photos/lourenco-1280.webp"
+  }
+ },
+ "lourenco_2": {
+  "w": 1280,
+  "h": 885,
+  "files": {
+   "280": "img/photos/lourenco_2-280.webp",
+   "560": "img/photos/lourenco_2-560.webp",
+   "960": "img/photos/lourenco_2-960.webp",
+   "1280": "img/photos/lourenco_2-1280.webp"
+  }
+ },
+ "lourenco_3": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/lourenco_3-280.webp",
+   "560": "img/photos/lourenco_3-560.webp",
+   "960": "img/photos/lourenco_3-960.webp",
+   "1280": "img/photos/lourenco_3-1280.webp"
+  }
+ },
+ "moniz": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/moniz-280.webp",
+   "560": "img/photos/moniz-560.webp",
+   "960": "img/photos/moniz-960.webp",
+   "1280": "img/photos/moniz-1280.webp"
+  }
+ },
+ "moniz_2": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/moniz_2-280.webp",
+   "560": "img/photos/moniz_2-560.webp",
+   "960": "img/photos/moniz_2-960.webp",
+   "1280": "img/photos/moniz_2-1280.webp"
+  }
+ },
+ "moniz_3": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/moniz_3-280.webp",
+   "560": "img/photos/moniz_3-560.webp",
+   "960": "img/photos/moniz_3-960.webp",
+   "1280": "img/photos/moniz_3-1280.webp"
+  }
+ },
+ "monte": {
+  "w": 1280,
+  "h": 1056,
+  "files": {
+   "280": "img/photos/monte-280.webp",
+   "560": "img/photos/monte-560.webp",
+   "960": "img/photos/monte-960.webp",
+   "1280": "img/photos/monte-1280.webp"
+  }
+ },
+ "monte_2": {
+  "w": 1280,
+  "h": 2147,
+  "files": {
+   "280": "img/photos/monte_2-280.webp",
+   "560": "img/photos/monte_2-560.webp",
+   "960": "img/photos/monte_2-960.webp",
+   "1280": "img/photos/monte_2-1280.webp"
+  }
+ },
+ "monte_3": {
+  "w": 1280,
+  "h": 719,
+  "files": {
+   "280": "img/photos/monte_3-280.webp",
+   "560": "img/photos/monte_3-560.webp",
+   "960": "img/photos/monte_3-960.webp",
+   "1280": "img/photos/monte_3-1280.webp"
+  }
+ },
+ "oldtown": {
+  "w": 1280,
+  "h": 2048,
+  "files": {
+   "280": "img/photos/oldtown-280.webp",
+   "560": "img/photos/oldtown-560.webp",
+   "960": "img/photos/oldtown-960.webp",
+   "1280": "img/photos/oldtown-1280.webp"
+  }
+ },
+ "oldtown_2": {
+  "w": 1280,
+  "h": 2085,
+  "files": {
+   "280": "img/photos/oldtown_2-280.webp",
+   "560": "img/photos/oldtown_2-560.webp",
+   "960": "img/photos/oldtown_2-960.webp",
+   "1280": "img/photos/oldtown_2-1280.webp"
+  }
+ },
+ "pargo": {
+  "w": 1200,
+  "h": 906,
+  "files": {
+   "280": "img/photos/pargo-280.webp",
+   "560": "img/photos/pargo-560.webp",
+   "960": "img/photos/pargo-960.webp",
+   "1200": "img/photos/pargo-1200.webp"
+  }
+ },
+ "pargo_2": {
+  "w": 1280,
+  "h": 1280,
+  "files": {
+   "280": "img/photos/pargo_2-280.webp",
+   "560": "img/photos/pargo_2-560.webp",
+   "960": "img/photos/pargo_2-960.webp",
+   "1280": "img/photos/pargo_2-1280.webp"
+  }
+ },
+ "pontasol": {
+  "w": 1280,
+  "h": 857,
+  "files": {
+   "280": "img/photos/pontasol-280.webp",
+   "560": "img/photos/pontasol-560.webp",
+   "960": "img/photos/pontasol-960.webp",
+   "1280": "img/photos/pontasol-1280.webp"
+  }
+ },
+ "portosanto": {
+  "w": 1280,
+  "h": 960,
+  "files": {
+   "280": "img/photos/portosanto-280.webp",
+   "560": "img/photos/portosanto-560.webp",
+   "960": "img/photos/portosanto-960.webp",
+   "1280": "img/photos/portosanto-1280.webp"
+  }
+ },
+ "portosanto_2": {
+  "w": 1280,
+  "h": 960,
+  "files": {
+   "280": "img/photos/portosanto_2-280.webp",
+   "560": "img/photos/portosanto_2-560.webp",
+   "960": "img/photos/portosanto_2-960.webp",
+   "1280": "img/photos/portosanto_2-1280.webp"
+  }
+ },
+ "ruivo": {
+  "w": 1280,
+  "h": 1707,
+  "files": {
+   "280": "img/photos/ruivo-280.webp",
+   "560": "img/photos/ruivo-560.webp",
+   "960": "img/photos/ruivo-960.webp",
+   "1280": "img/photos/ruivo-1280.webp"
+  }
+ },
+ "ruivo_2": {
+  "w": 1280,
+  "h": 721,
+  "files": {
+   "280": "img/photos/ruivo_2-280.webp",
+   "560": "img/photos/ruivo_2-560.webp",
+   "960": "img/photos/ruivo_2-960.webp",
+   "1280": "img/photos/ruivo_2-1280.webp"
+  }
+ },
+ "ruivo_3": {
+  "w": 1280,
+  "h": 1920,
+  "files": {
+   "280": "img/photos/ruivo_3-280.webp",
+   "560": "img/photos/ruivo_3-560.webp",
+   "960": "img/photos/ruivo_3-960.webp",
+   "1280": "img/photos/ruivo_3-1280.webp"
+  }
+ },
+ "santana": {
+  "w": 1280,
+  "h": 880,
+  "files": {
+   "280": "img/photos/santana-280.webp",
+   "560": "img/photos/santana-560.webp",
+   "960": "img/photos/santana-960.webp",
+   "1280": "img/photos/santana-1280.webp"
+  }
+ },
+ "santana_2": {
+  "w": 1280,
+  "h": 1920,
+  "files": {
+   "280": "img/photos/santana_2-280.webp",
+   "560": "img/photos/santana_2-560.webp",
+   "960": "img/photos/santana_2-960.webp",
+   "1280": "img/photos/santana_2-1280.webp"
+  }
+ },
+ "seixal": {
+  "w": 1280,
+  "h": 888,
+  "files": {
+   "280": "img/photos/seixal-280.webp",
+   "560": "img/photos/seixal-560.webp",
+   "960": "img/photos/seixal-960.webp",
+   "1280": "img/photos/seixal-1280.webp"
+  }
+ },
+ "seixal_2": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/seixal_2-280.webp",
+   "560": "img/photos/seixal_2-560.webp",
+   "960": "img/photos/seixal_2-960.webp",
+   "1280": "img/photos/seixal_2-1280.webp"
+  }
+ },
+ "veu": {
+  "w": 1280,
+  "h": 1920,
+  "files": {
+   "280": "img/photos/veu-280.webp",
+   "560": "img/photos/veu-560.webp",
+   "960": "img/photos/veu-960.webp",
+   "1280": "img/photos/veu-1280.webp"
+  }
+ },
+ "veu_2": {
+  "w": 1280,
+  "h": 1920,
+  "files": {
+   "280": "img/photos/veu_2-280.webp",
+   "560": "img/photos/veu_2-560.webp",
+   "960": "img/photos/veu_2-960.webp",
+   "1280": "img/photos/veu_2-1280.webp"
+  }
+ },
+ "yacht": {
+  "w": 1280,
+  "h": 853,
+  "files": {
+   "280": "img/photos/yacht-280.webp",
+   "560": "img/photos/yacht-560.webp",
+   "960": "img/photos/yacht-960.webp",
+   "1280": "img/photos/yacht-1280.webp"
+  }
+ }
+}

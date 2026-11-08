@@ -7,8 +7,9 @@
   "scripts": {
     "images": "python tools/images.py",
     "build": "node build.mjs",
-    "all": "python tools/images.py && node build.mjs",
+    "all": "python tools/fetch_photos.py && python tools/images.py && node build.mjs",
     "serve": "python -m http.server 5240 --bind 127.0.0.1 --directory dist",
-    "deploy": "node build.mjs && node tools/deploy.mjs"
+    "deploy": "node build.mjs && node tools/deploy.mjs",
+    "photos": "python tools/fetch_photos.py"
   }
 }

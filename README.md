@@ -36,5 +36,8 @@
 - Увесь текст є в HTML одразу.
 
 ## Фото
-Фото локацій — Wikimedia Commons (CC BY / CC BY-SA, одне — public domain), автори вказані в лайтбоксі та у футері («Автори фото»).
-Зараз вони завантажуються з серверів Wikimedia; їх можна перенести на власний хостинг.
+Фото локацій — Wikimedia Commons (CC BY / CC BY-SA, одне — public domain), автори вказані в перегляді фото та у футері («Автори фото»).
+Сайт віддає їх зі своєї папки у форматі WebP (280–1280 px):
+- `npm run photos` — завантажує оригінали в `assets/photos/` (не в git, ~22 МБ);
+- `npm run images` — робить з них WebP у `dist/img/photos/` і список `src/data/photo-files.json`;
+- `npm run all` — усе разом плюс збірка сайту. Якщо WebP немає, сайт бере фото з Wikimedia.
