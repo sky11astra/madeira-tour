@@ -111,7 +111,9 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&amp;family=Inter:wght@300;400;500&amp;display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&amp;family=Inter:wght@300;400;500&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&amp;family=Inter:wght@300;400;500&amp;display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&amp;family=Inter:wght@300;400;500&amp;display=swap"></noscript>
 <script>document.documentElement.classList.add("js")</script>
 <style>${css}</style>
 <script type="application/ld+json">${jsonLd}</script>
@@ -344,10 +346,8 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
 
 <div id="lit" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="litTitle">
   <div class="scrim" data-close></div>
-  <div class="plate">
-    <div class="shot"><img alt="" decoding="async"><button class="xbtn" type="button" data-close>${esc(c.close)}</button>
-      <button class="lnav prev" type="button" data-step-shot="-1" aria-label="${esc(c.prevPhoto)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-      <button class="lnav next" type="button" data-step-shot="1" aria-label="${esc(c.nextPhoto)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
+  <div class="plate"><div class="slide">
+    <div class="shot"><img alt="" decoding="async"><button class="xbtn" type="button" data-close>${esc(c.close)}</button></div>
     <div class="meta">
       <div><h2 id="litTitle"></h2><p class="where" id="litWhere"></p></div>
       <div>
@@ -356,7 +356,7 @@ ${others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}
         <div class="lfoot"><p class="credit"><span class="lcount" id="litCount"></span><span id="litCredit"></span></p><button class="want" type="button" id="litWant" data-want="" aria-pressed="false">${heart}<span>${esc(c.add)}</span></button></div>
       </div>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div id="dot" aria-hidden="true"></div>

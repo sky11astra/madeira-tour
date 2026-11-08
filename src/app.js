@@ -37,6 +37,7 @@ const css3 = (M) => `matrix3d(${f5(M[0])},${f5(M[3])},${f5(M[6])},0,${f5(M[1])},
 /* ===== Глобус: фото рівними рядами-«широтами», як плитка на кулі, без накладань ===== */
 const stage = $("#stage"), world = $("#world"), orb = $("#orb");
 const rng = (a) => () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const DENS = Math.min(1, 2 / (window.devicePixelRatio || 1));
 const LATS = [0, 23, -23, 46, -46, 69, -69];
 const slots = (() => {
   const w = LATS.map((l) => Math.cos(l * Math.PI / 180)), sum = w.reduce((a, b) => a + b);
@@ -65,7 +66,8 @@ const cards = S.map((p, i) => {
 });
 function load(c) {
   if (c.loading) return;
-  c.loading = true; c.sized = CW; c.img.sizes = CW + "px"; c.img.srcset = S[c.i].s; c.img.src = S[c.i].src;
+  c.loading = true; c.sized = CW; c.img.fetchPriority = c.first ? "high" : "low";
+  c.img.sizes = Math.round(CW * DENS) + "px"; c.img.srcset = S[c.i].s; c.img.src = S[c.i].src;
 }
 
 /* ===== Зоряне небо і напівпрозорі хмарки ===== */
@@ -139,7 +141,7 @@ function layout(force) {
   html.style.setProperty("--persp", persp + "px");
   for (const c of cards) {
     c.el.style.transform = `translate3d(${(c.x * R).toFixed(2)}px,${(-c.y * R).toFixed(2)}px,${(c.z * R).toFixed(2)}px) rotateY(${c.lon.toFixed(3)}deg) rotateX(${c.lat.toFixed(3)}deg)`;
-    if (c.loading && CW > c.sized) { c.sized = CW; c.img.sizes = CW + "px"; }
+    if (c.loading && CW > c.sized) { c.sized = CW; c.img.sizes = Math.round(CW * DENS) + "px"; }
   }
   drawSky();
 }
@@ -152,6 +154,8 @@ const rotAxis = (x, y, z, a) => {
 };
 const rotZ = (a) => { const c = Math.cos(a), s = Math.sin(a); return [c, -s, 0, s, c, 0, 0, 0, 1]; };
 const TILT = -12 * Math.PI / 180, K = .0023;
+const ZMAX = 1.8;
+let zoom = 1;
 let M = mul(rotY(-14 * Math.PI / 180), rotX(TILT)), camZ = 0, velX = 0, velY = 0, velZ = 0, focused = -1, dragging = false, running = false, raf = 0;
 let idleAt = performance.now() + 1500, autoW = 0, lastT = 0, frames = 0;
 const zOf = (c) => M[6] * c.x - M[7] * c.y + M[8] * c.z;
@@ -174,13 +178,13 @@ function frame() {
   if (++frames % 90 === 0) M = ortho(M);
   const p = clamp(scrollY / (VH * .16), 0, 1);
   camZ += (p * Math.min(64, R * .12) - camZ) * .075;
-  world.style.transform = `translateZ(${camZ.toFixed(2)}px) ${css3(M)}`;
+  world.style.transform = `translateZ(${camZ.toFixed(2)}px) scale3d(${zoom.toFixed(3)},${zoom.toFixed(3)},${zoom.toFixed(3)}) ${css3(M)}`;
   const shade = 1 - Math.min(1, p * 1.6), near = persp * .66;
   for (let i = 0; i < N; i++) {
     const c = cards[i], zf = zOf(c);
     const base = .14 + .86 * Math.pow((zf + 1) / 2, .85);
     let dim = shade * (1 - base), fade = 1;
-    const az = zf * R + camZ;
+    const az = zf * R * zoom + camZ;
     if (az > near) fade = Math.max(0, 1 - (az - near) / 190);
     if (focused >= 0) { dim = Math.min(1, dim + .78); if (i === focused) fade = 0; }
     const d = Math.round(dim * 100) / 100, o = Math.round(fade * 100) / 100;
@@ -197,7 +201,7 @@ function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; 
    двома пальцями — поворот навколо центру (перевернути «з ніг на голову»); на комп'ютері те саме — Shift + перетягування ===== */
 let ptr = null, twist = null;
 const pts = new Map();
-const pair = () => { const [p, q] = [...pts.values()]; return { a: Math.atan2(q.y - p.y, q.x - p.x), mx: (p.x + q.x) / 2, my: (p.y + q.y) / 2 }; };
+const pair = () => { const [p, q] = [...pts.values()]; return { a: Math.atan2(q.y - p.y, q.x - p.x), d: Math.hypot(q.x - p.x, q.y - p.y), mx: (p.x + q.x) / 2, my: (p.y + q.y) / 2 }; };
 stage.addEventListener("pointerdown", (e) => {
   if (focused >= 0 || isOn("gridview") || (e.pointerType === "mouse" && e.button !== 0)) return;
   pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -223,6 +227,7 @@ stage.addEventListener("pointermove", (e) => {
     if (da > Math.PI) da -= 2 * Math.PI; else if (da < -Math.PI) da += 2 * Math.PI;
     const ax = -(g.my - twist.my) * K, ay = (g.mx - twist.mx) * K;
     M = mul(rotZ(da), mul(rotX(ax), mul(rotY(ay), M)));
+    if (twist.d > 20) zoom = clamp(zoom * g.d / twist.d, 1, ZMAX);
     velX = ax; velY = ay; velZ = da; twist = g; idleAt = performance.now();
     return;
   }
@@ -254,6 +259,11 @@ const endDrag = (e) => {
   dragging = false; ptr = null; idleAt = performance.now();
   if (click) { velX = velY = velZ = 0; if (card) openShot(+card.dataset.idx, card); }
 };
+stage.addEventListener("wheel", (e) => {
+  if (!e.ctrlKey || isOn("gridview")) return;
+  e.preventDefault();
+  zoom = clamp(zoom * Math.exp(-e.deltaY * .01), 1, ZMAX); idleAt = performance.now(); start();
+}, { passive: false });
 stage.addEventListener("pointerup", endDrag);
 stage.addEventListener("pointercancel", endDrag);
 
@@ -281,7 +291,7 @@ function tick(c) {
   if (!c.first) return;
   got++;
   if (bar) bar.style.transform = `scaleX(${Math.min(1, got / need)})`;
-  if (got >= need) setTimeout(reveal, Math.max(0, (seen ? 200 : 1000) - (performance.now() - born)));
+  if (got >= need) setTimeout(reveal, Math.max(0, (seen ? 120 : 650) - (performance.now() - born)));
 }
 function loadRest() { if (restLoaded) return; restLoaded = true; cards.forEach(load); }
 function reveal() {
@@ -307,13 +317,13 @@ function reveal() {
 }
 layout(true); frame();
 const order = cards.slice().sort((a, b) => zOf(b) - zOf(a));
-const firstN = Math.min(N, 22);
+const firstN = Math.min(N, 14);
 order.slice(0, firstN).forEach((c) => { c.first = true; });
 need = firstN;
 order.slice(0, firstN).forEach(load);
 onScroll();
-setTimeout(reveal, hash ? 300 : seen ? 1400 : 3000);
-setTimeout(loadRest, 4500);
+setTimeout(reveal, hash ? 250 : seen ? 900 : 2000);
+setTimeout(loadRest, 2600);
 
 /* ===== Кнопка «Назад» на телефоні: закриває фото, сітку чи меню й лишає на сайті ===== */
 const stack = [];
@@ -394,10 +404,14 @@ function fill(kind, idx, el, t) {
   }
   syncWants();
 }
+const slide = $(".slide", lit);
+let sliding = false;
+const resetSlide = () => { slide.style.transition = "none"; slide.style.transform = ""; slide.style.opacity = ""; };
 function openShot(idx, el, kind = "sphere") {
   const t = ++token;
   clearTimeout(closeTimer);
   if (!isOn("lit")) pushOv("lit");
+  resetSlide(); sliding = false;
   srcEl = el; lastFocus = document.activeElement; cur = { kind, idx };
   lit.classList.toggle("from-sphere", el.classList.contains("card"));
   if (kind === "sphere" && el.classList.contains("card")) focused = idx;
@@ -406,46 +420,94 @@ function openShot(idx, el, kind = "sphere") {
   lit.scrollTop = 0;
   if (!flip(el)) { plate.style.transition = plate.style.transform = plate.style.opacity = ""; }
   $(".xbtn", lit).focus({ preventScroll: true });
+  neighbors();
 }
-// Гортання: свайп по фото, кнопки ‹ ›, стрілки на клавіатурі.
+// Сусідні фото завантажуються заздалегідь, тож перехід без блимання.
+const cache = new Map();
+function preload(url) {
+  if (!url || cache.has(url)) return;
+  const im = new Image(); im.decoding = "async"; im.src = url; cache.set(url, im);
+  if (cache.size > 16) cache.delete(cache.keys().next().value);
+}
+const ready = (url) => { const im = cache.get(url); return !!(im && im.complete && im.naturalWidth); };
+function neighbors() {
+  if (!cur) return;
+  const n = cur.kind === "apt" ? D.apts.length : N;
+  for (const d of [1, -1, 2]) { const j = (cur.idx + d + n) % n; preload(cur.kind === "apt" ? D.apts[j].full : S[j].full); }
+}
 function stepShot(d) {
   if (!cur || !isOn("lit")) return;
   const n = cur.kind === "apt" ? D.apts.length : N;
   cur.idx = (cur.idx + d + n) % n;
   if (focused >= 0) focused = cur.idx;
   srcEl = cur.kind === "apt" ? $(`[data-apt="${cur.idx}"]`) : focused >= 0 ? cards[cur.idx].el : null;
-  shotImg.classList.add("swap");
   fill(cur.kind, cur.idx, null, ++token);
   lit.scrollTop = 0; idleAt = performance.now();
+  neighbors();
 }
 function loadShot(el, small, full, t) {
-  const im = el && el.querySelector("img"), first = im && im.currentSrc ? im.currentSrc : small;
-  let gotFull = false;
   shotImg.alt = litTitle.textContent;
-  if (el) shotImg.src = first;
-  else { const pre = new Image(); pre.onload = () => { if (t === token && !gotFull) { shotImg.src = first; shotImg.classList.remove("swap"); } }; pre.src = first; }
+  if (ready(full)) { shotImg.src = full; return; }
+  const im = el && el.querySelector("img");
+  shotImg.src = im && im.currentSrc ? im.currentSrc : small;
   const hi = new Image();
   hi.decoding = "async";
-  hi.onload = () => { if (t === token) { gotFull = true; shotImg.src = full; shotImg.classList.remove("swap"); } };
-  hi.src = full;
+  hi.onload = () => { if (t !== token) return; (hi.decode ? hi.decode().catch(() => {}) : Promise.resolve()).then(() => { if (t === token) shotImg.src = full; }); };
+  hi.src = full; cache.set(full, hi);
+}
+// Карусель: весь блок (фото + текст) їде за пальцем і перелистується на сусіднє фото.
+function go(d) {
+  if (!cur || sliding || !isOn("lit")) return;
+  sliding = true;
+  const w = slide.offsetWidth + 48, ease = "cubic-bezier(.22,.61,.36,1)";
+  slide.style.transition = `transform .22s ${ease},opacity .22s ease`;
+  slide.style.transform = `translate3d(${-d * w}px,0,0)`; slide.style.opacity = "0";
+  setTimeout(() => {
+    stepShot(d);
+    slide.style.transition = "none";
+    slide.style.transform = `translate3d(${(d * w * .6).toFixed(0)}px,0,0)`;
+    slide.offsetWidth;
+    slide.style.transition = `transform .34s ${ease},opacity .3s ease`;
+    slide.style.transform = ""; slide.style.opacity = "";
+    setTimeout(() => { sliding = false; }, 340);
+  }, 220);
 }
 let sw = null;
-shot.addEventListener("pointerdown", (e) => { if (!e.target.closest("button")) sw = { id: e.pointerId, x: e.clientX, y: e.clientY }; });
-shot.addEventListener("pointerup", (e) => {
+slide.addEventListener("pointerdown", (e) => {
+  if (sliding || e.target.closest("button,a") || (e.pointerType === "mouse" && e.button !== 0)) return;
+  sw = { id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, t: performance.now(), on: false };
+});
+slide.addEventListener("pointermove", (e) => {
   if (!sw || e.pointerId !== sw.id) return;
   const dx = e.clientX - sw.x, dy = e.clientY - sw.y;
-  sw = null;
-  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) stepShot(dx < 0 ? 1 : -1);
+  if (!sw.on) {
+    if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+    if (Math.abs(dy) > Math.abs(dx)) { sw = null; return; }
+    sw.on = true; slide.style.transition = "none";
+    try { slide.setPointerCapture(e.pointerId); } catch (_) {}
+  }
+  sw.dx = dx;
+  slide.style.transform = `translate3d(${dx.toFixed(1)}px,0,0)`;
+  slide.style.opacity = String(1 - Math.min(.4, Math.abs(dx) / 800));
 });
-shot.addEventListener("pointercancel", () => { sw = null; });
-lit.addEventListener("click", (e) => { const b = e.target.closest("[data-step-shot]"); if (b) stepShot(+b.dataset.stepShot); });
+const endSwipe = (e) => {
+  if (!sw || e.pointerId !== sw.id) return;
+  const { dx, on, t } = sw;
+  sw = null;
+  if (!on) return;
+  const v = Math.abs(dx) / Math.max(1, performance.now() - t);
+  if (Math.abs(dx) > slide.offsetWidth * .2 || (Math.abs(dx) > 30 && v > .45)) go(dx < 0 ? 1 : -1);
+  else { slide.style.transition = "transform .3s cubic-bezier(.22,.61,.36,1),opacity .3s ease"; slide.style.transform = ""; slide.style.opacity = ""; }
+};
+slide.addEventListener("pointerup", endSwipe);
+slide.addEventListener("pointercancel", endSwipe);
 function closeShot(fromPop = false) {
   if (!isOn("lit")) return;
   if (!fromPop) dropOv("lit");
   focused = -1; token++; idleAt = performance.now();
   body.classList.remove("lit"); lit.setAttribute("aria-hidden", "true");
   if (!(srcEl && document.contains(srcEl) && srcEl.offsetParent !== null && flip(srcEl, true))) plate.style.opacity = "0";
-  closeTimer = setTimeout(() => { plate.style.transition = "none"; plate.style.transform = ""; plate.style.opacity = ""; plate.offsetWidth; plate.style.transition = ""; }, 640);
+  closeTimer = setTimeout(() => { plate.style.transition = "none"; plate.style.transform = ""; plate.style.opacity = ""; resetSlide(); plate.offsetWidth; plate.style.transition = ""; }, 640);
   lockScroll();
   if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
 }
@@ -478,7 +540,7 @@ menu.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => { if (langs && langs.open && !e.target.closest(".langs")) langs.open = false; });
 $(".wordmark").addEventListener("click", (e) => { e.preventDefault(); setMenu(false); if (isOn("gridview")) toggleGrid(false); scrollTo({ top: 0, behavior: reduce.matches ? "auto" : "smooth" }); });
 addEventListener("keydown", (e) => {
-  if (isOn("lit") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { e.preventDefault(); stepShot(e.key === "ArrowRight" ? 1 : -1); return; }
+  if (isOn("lit") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { e.preventDefault(); go(e.key === "ArrowRight" ? 1 : -1); return; }
   if (e.key !== "Escape") return;
   if (langs && langs.open) langs.open = false;
   else if (isOn("lit")) closeShot(); else if (isOn("menuopen")) { setMenu(false); menuBtn.focus(); } else if (isOn("gridview")) toggleGrid(false);
