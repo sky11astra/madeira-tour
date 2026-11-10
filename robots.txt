@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# AI-пошук і асистенти — ласкаво просимо
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://sky11astra.github.io/madeira-tour/sitemap.xml
