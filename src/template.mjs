@@ -6,16 +6,22 @@ const plane = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 15.2v-
 const chev = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
 
 export function render(ctx) {
-  const { lang, c, cfg, base, places, routes, apts, mapSvg, jsonLd, urls, css, js, data, credits, yacht, mainIdx, remote } = ctx;
+  const { lang, c, cfg, base, places, routes, apts, mapSvg, jsonLd, urls, css, js, data, credits, yacht, mainIdx, remote, svc, doors, isle } = ctx;
   const brand = cfg.brand, S = c.spots, T = c.trips;
+  // Слова заголовка між зірочками стають курсивом кольору секції.
+  const h2 = (s) => esc(s).replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  const coord = (lat, lon) => {
+    const f = (v, a, b) => { const d = Math.abs(v), g = Math.floor(d); return `${g}°${String(Math.round((d - g) * 60)).padStart(2, "0")}′ ${v >= 0 ? a : b}`; };
+    return `${f(lat, "N", "S")} ${f(lon, "E", "W")}`;
+  };
   const t = (s) => esc(String(s).replace(/\{brand\}/g, brand));
   const name = (id) => S[id]?.t || c.stops[id] || id;
   const self = cfg.langs.find((l) => l.code === lang);
   const others = cfg.langs.filter((l) => l.code !== lang);
   const langLinks = (cls) => cfg.langs.map((l) => `<a class="${cls}" href="${urls.rel[l.code]}" hreflang="${l.hreflang}" lang="${l.code}"${l.code === lang ? ' aria-current="page"' : ""}>${cls === "lname" ? esc(l.name) : `<b>${l.label}</b><span>${esc(l.name)}</span>`}</a>`).join("");
 
-  const services = c.services.items.map(([m, u, h, p]) => `
-        <div class="mrow"><p class="metric">${esc(m)}<small>${esc(u)}</small></p><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("");
+  const services = c.services.items.map(([m, u, h, p], i) => `
+        <div class="mrow"><p class="metric">${esc(m)}<small>${esc(u)}</small></p><h3>${esc(h)}</h3><p class="mtext">${esc(p)}</p><img class="mthumb lazy" src="${svc[i].src}" srcset="${svc[i].set}" sizes="(max-width:900px) 180px, 216px" width="480" height="320" loading="lazy" decoding="async" alt=""></div>`).join("");
 
   const filters = Object.entries(c.regions).map(([k, v], i) =>
     `<button class="chip" type="button" data-filter="${k}" aria-pressed="${i === 0}">${esc(v)}</button>`).join("");
@@ -25,10 +31,10 @@ export function render(ctx) {
     return `
         <article class="pcard" data-id="${p.id}" data-region="${p.region}">
           <button class="pimg" type="button" data-open="${mainIdx[p.id]}" aria-label="${esc(c.places.openPhoto)}: ${esc(L.t)}">
-            <img src="${p.img.card}" srcset="${p.img.cardSet}" sizes="(max-width:768px) 84vw, (max-width:1100px) 46vw, 30vw" width="960" height="720" loading="lazy" decoding="async" alt="${esc(L.t)} — ${esc(L.area)}">
+            <img class="lazy" src="${p.img.card}" srcset="${p.img.cardSet}" sizes="(max-width:768px) 84vw, (max-width:1100px) 46vw, 30vw" width="960" height="720" loading="lazy" decoding="async" alt="${esc(L.t)} — ${esc(L.area)}">
           </button>
           <div class="pbody">
-            <p class="parea">${esc(L.area)}</p>
+            <p class="parea">${esc(L.area)}<i>${coord(p.lat, p.lon)}</i></p>
             <h3>${esc(L.t)}</h3>
             <p class="pstory">${esc(L.story)}</p>
             <p class="pfact"><span>${esc(c.factLabel)}</span>${esc(L.fact)}</p>
@@ -65,10 +71,12 @@ export function render(ctx) {
         </div>`;
   }).join("");
 
-  const gallery = apts.map((a, i) => `
+  const tileSizes = ["(max-width:768px) 94vw, 66vw", "(max-width:768px) 94vw, 32vw", "(max-width:768px) 46vw, 20vw", "(max-width:768px) 46vw, 20vw", "(max-width:768px) 94vw, 20vw", "(max-width:768px) 46vw, 20vw", "(max-width:768px) 46vw, 20vw"];
+  const tile = (a, i) => `
           <button class="g${i}" type="button" data-apt="${i}" aria-label="${esc(c.apts[a.src])}">
-            <img src="${base}${a.img.mid}" srcset="${a.img.set}" sizes="${i === 0 ? "(max-width:768px) 92vw, 34vw" : "(max-width:768px) 46vw, 17vw"}" width="${a.w}" height="${a.h}" loading="lazy" decoding="async" alt="${esc(c.apts[a.src])}">
-          </button>`).join("");
+            <img${i > 1 ? ' class="lazy"' : ""} src="${base}${a.img.mid}" srcset="${a.img.set}" sizes="${tileSizes[i]}" width="${a.w}" height="${a.h}" loading="lazy" decoding="async" alt="${esc(c.apts[a.src])}">${i === 0 ? `<span class="tap" hidden>${esc(c.waterHint)}</span>` : ""}
+          </button>`;
+  const pools = apts.slice(0, 2).map(tile).join(""), rooms = apts.slice(2).map((a, i) => tile(a, i + 2)).join("");
 
   const routeOpts = routes.map((r, i) => `<label class="opt"><input type="radio" name="route" value="${r.id}"${i === 0 ? " checked" : ""}><span>${esc(T[r.id].name)}</span></label>`).join("")
     + `<label class="opt"><input type="radio" name="route" value="custom"><span>${esc(c.routes.custom)}</span></label>`;
@@ -168,7 +176,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
   <section class="sec" id="services" aria-labelledby="h-services">
     <div class="wrap">
       <div class="head2">
-        <div><p class="label">${esc(c.services.label)}</p><h2 class="h2" id="h-services">${esc(c.services.h2)}</h2></div>
+        <div><p class="label">${esc(c.services.label)}</p><h2 class="h2" id="h-services">${h2(c.services.h2)}</h2></div>
         <p class="lead">${esc(c.services.lead)}</p>
       </div>
       <div class="manifest">${services}
@@ -179,7 +187,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
   <section class="sec" id="places" aria-labelledby="h-places">
     <div class="wrap">
       <div class="head2">
-        <div><p class="label">${esc(c.places.label)}</p><h2 class="h2" id="h-places">${esc(c.places.h2)}</h2></div>
+        <div><p class="label">${esc(c.places.label)}</p><h2 class="h2" id="h-places">${h2(c.places.h2)}</h2></div>
         <p class="lead">${esc(c.places.lead)}</p>
       </div>
       <div class="filters" role="group" aria-label="${esc(c.places.label)}">${filters}<p class="wantcount" aria-live="polite"><b id="wantN">0</b>${esc(c.places.counter)}</p></div>
@@ -192,7 +200,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
   <section class="sec" id="routes" aria-labelledby="h-routes">
     <div class="wrap">
       <div class="head2">
-        <div><p class="label">${esc(c.routes.label)}</p><h2 class="h2" id="h-routes">${esc(c.routes.h2)}</h2></div>
+        <div><p class="label">${esc(c.routes.label)}</p><h2 class="h2" id="h-routes">${h2(c.routes.h2)}</h2></div>
         <p class="lead">${esc(c.routes.lead)}</p>
       </div>
       <div class="rtabs" role="tablist" aria-label="${esc(c.routes.label)}">${rtabs}
@@ -205,15 +213,17 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
     </div>
   </section>
 
-  <section class="sec" id="stay" aria-labelledby="h-stay">
-    <div class="wrap stay-grid">
-      <div>
-        <p class="label">${esc(c.stay.label)}</p>
-        <h2 class="h2" id="h-stay">${esc(c.stay.h2)}</h2>
-        <p class="lead">${esc(c.stay.lead)}</p>
-        <ul class="feat">${c.stay.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+  <section class="sec day" id="stay" aria-labelledby="h-stay">
+    <div class="wrap">
+      <div class="stay-head">
+        <div><p class="label">${esc(c.stay.label)}</p><h2 class="h2" id="h-stay">${h2(c.stay.h2)}</h2></div>
+        <div><p class="lead">${esc(c.stay.lead)}</p><ul class="feat">${c.stay.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul></div>
       </div>
-      <div class="gallery">${gallery}
+      <div class="gallery">
+        <div class="pools">${pools}
+        </div>
+        <div class="rooms">${rooms}
+        </div>
       </div>
     </div>
   </section>
@@ -221,7 +231,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
   <section class="sec" id="transfer" aria-labelledby="h-transfer">
     <div class="wrap">
       <p class="label">${esc(c.transfer.label)}</p>
-      <h2 class="h2" id="h-transfer">${esc(c.transfer.h2)}</h2>
+      <h2 class="h2" id="h-transfer">${h2(c.transfer.h2)}</h2>
       <div class="duo">
         <article class="panel">
           <div class="ticket">${c.transfer.ticket.map(([b, s]) => `<div><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("")}</div>
@@ -243,20 +253,19 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
     <div class="wrap events">
       <div>
         <p class="label">${esc(c.events.label)}</p>
-        <h2 class="h2" id="h-events">${esc(c.events.h2)}</h2>
+        <h2 class="h2" id="h-events">${h2(c.events.h2)}</h2>
         <p class="lead">${esc(c.events.lead)}</p>
-      </div>
-      <div>
         <ul class="elist">${c.events.list.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
         <a class="btn solid" href="#book" data-prefill="team" data-extra="event">${esc(c.events.cta)}</a>
       </div>
+      <div class="doors" aria-hidden="true">${doors.map((d) => `<span><img class="lazy" src="${d.src}" srcset="${d.set}" sizes="(max-width:900px) 46vw, 22vw" width="480" height="640" loading="lazy" decoding="async" alt=""></span>`).join("")}</div>
     </div>
   </section>
 
-  <section class="sec" id="book" aria-labelledby="h-book">
+  <section class="sec day" id="book" aria-labelledby="h-book">
     <div class="wrap">
       <div class="head2">
-        <div><p class="label">${esc(c.book.label)}</p><h2 class="h2" id="h-book">${esc(c.book.h2)}</h2></div>
+        <div><p class="label">${esc(c.book.label)}</p><h2 class="h2" id="h-book">${h2(c.book.h2)}</h2></div>
         <p class="lead">${esc(c.book.lead)}</p>
       </div>
       <div class="bgrid">
@@ -265,6 +274,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
           <div class="field"><label for="fDep">${esc(c.book.departure)}</label><input class="inp" type="date" id="fDep" name="departure" required></div>
           <div class="field full"><label for="fGuests">${esc(c.book.guests)}</label>
             <div class="step"><button type="button" data-step="-1" aria-label="${esc(c.book.less)}">−</button><input id="fGuests" name="guests" type="number" inputmode="numeric" min="1" max="99" value="2"><button type="button" data-step="1" aria-label="${esc(c.book.more)}">+</button></div>
+            <div class="seats" id="seats" aria-hidden="true"><div>${"<i></i>".repeat(18)}</div><div>${"<i></i>".repeat(18)}</div></div>
           </div>
           <fieldset class="field full"><legend>${esc(c.book.route)}</legend><div class="opts">${routeOpts}</div></fieldset>
           <fieldset class="field full"><legend>${esc(c.book.extras)}</legend><div class="opts">${extras}</div></fieldset>
@@ -308,16 +318,17 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
 
   <section class="sec" id="faq" aria-labelledby="h-faq">
     <div class="wrap faq">
-      <div class="sticky"><p class="label">${esc(c.faq.label)}</p><h2 class="h2" id="h-faq">${esc(c.faq.h2)}</h2></div>
+      <div class="sticky"><p class="label">${esc(c.faq.label)}</p><h2 class="h2" id="h-faq">${h2(c.faq.h2)}</h2></div>
       <div class="qa">${faq}
       </div>
     </div>
   </section>
 
   <footer class="sec" id="contact" aria-labelledby="h-contact">
+    <canvas id="fsky" aria-hidden="true"></canvas>
     <div class="wrap">
       <div class="fgrid">
-        <div><p class="label">${esc(brand)}</p><h2 class="h2" id="h-contact">${esc(c.footer.h2)}</h2><p class="lead">${esc(c.footer.lead)}</p></div>
+        <div><p class="label">${esc(brand)}</p><h2 class="h2" id="h-contact">${h2(c.footer.h2)}</h2><p class="lead">${esc(c.footer.lead)}</p></div>
         <address class="contacts">
           <a href="${wa}" rel="noopener" target="_blank"><span>WhatsApp</span><b>${esc(cfg.contacts.phone)}</b></a>
           <a href="https://t.me/${esc(cfg.contacts.telegram)}" rel="noopener" target="_blank"><span>Telegram</span><b>@${esc(cfg.contacts.telegram)}</b></a>
@@ -326,6 +337,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
           <div><span>${esc(c.footer.addressLbl)}</span><b>${esc(c.footer.address)}</b></div>
         </address>
       </div>
+      <svg class="isle" viewBox="0 0 1000 ${isle.h}" aria-hidden="true"><path d="${isle.d}"/><circle class="halo" cx="${isle.x}" cy="${isle.y}" r="9"/><circle cx="${isle.x}" cy="${isle.y}" r="4.5"/><text x="${isle.x}" y="${isle.y + 40}" text-anchor="middle">${esc(name("funchal"))}</text></svg>
       <p class="giant" aria-hidden="true">Madeira<em>Tour</em></p>
       <nav class="flangs" aria-label="${esc(c.langMenu)}">${langLinks("lname")}</nav>
       <div class="fbottom">
@@ -347,7 +359,7 @@ ${remote ? '<link rel="preconnect" href="https://upload.wikimedia.org">' : ""}
 <div id="lit" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="litTitle">
   <div class="scrim" data-close></div>
   <div class="plate"><div class="slide">
-    <div class="shot"><img alt="" decoding="async"><button class="xbtn" type="button" data-close>${esc(c.close)}</button></div>
+    <div class="shot"><img alt="" decoding="async"><span class="tap" id="litTap" hidden>${esc(c.waterHint)}</span><button class="xbtn" type="button" data-close>${esc(c.close)}</button></div>
     <div class="meta">
       <div><h2 id="litTitle"></h2><p class="where" id="litWhere"></p></div>
       <div>

@@ -19,7 +19,7 @@ export default {
   addr: "Funchal · Madère · Portugal",
   services: {
     label: "Clé en main",
-    h2: "Vous arrivez. Nous nous occupons du reste.",
+    h2: "Vous arrivez. *Nous nous occupons du reste.*",
     lead: "Nous organisons tout votre séjour à Madère : nous vous accueillons à l’aéroport, vous logeons, vous conduisons, vous guidons en montagne et vous emmenons en mer. Le programme suit vos envies : un lever de soleil au-dessus des nuages, une piscine et du poisson grillé, ou tout à la fois.",
     items: [
       ["1–36", "personnes", "Hébergement", "Appartements avec piscine à Funchal pour un voyageur seul, une famille ou un groupe jusqu’à 36 personnes."],
@@ -29,21 +29,21 @@ export default {
       ["Centre", "de Funchal", "Événements", "Événements d’entreprise et fêtes au cœur de Funchal, à côté de Plaza Madeira."]
     ]
   },
-  places: { label: "Atlas de l’île", h2: "21 lieux qui valent le voyage", lead: "Choisissez ce que vous voulez voir : les lieux marqués s’ajoutent directement à votre demande, et nous construisons l’itinéraire autour d’eux.", counter: "dans votre voyage", openPhoto: "Ouvrir la photo" },
+  places: { label: "Atlas de l’île", h2: "21 lieux *qui valent le voyage*", lead: "Choisissez ce que vous voulez voir : les lieux marqués s’ajoutent directement à votre demande, et nous construisons l’itinéraire autour d’eux.", counter: "dans votre voyage", openPhoto: "Ouvrir la photo" },
   routes: {
-    label: "Itinéraires", h2: "Quatre itinéraires pour tout voir",
+    label: "Itinéraires", h2: "Quatre itinéraires *pour tout voir*",
     lead: "Nous avons ordonné les lieux pour éviter tout aller-retour et vous faire découvrir chacun à sa meilleure heure. Chaque itinéraire s’adapte à vous, et chaque journée est confirmée selon la météo, qui change vite en montagne.",
     day: "Jour", km: "km", why: "Pourquoi cet ordre", choose: "Choisir cet itinéraire", mapAria: "Carte de l’itinéraire à Madère",
     portoSanto: "Porto Santo ↗ ≈ 2 h 30 en ferry", desertas: "Desertas", funchal: "Funchal", custom: "À construire ensemble",
     length: "Durée", pace: "Rythme", bestFor: "Idéal pour", ocean: "Océan Atlantique"
   },
   stay: {
-    label: "Votre logement", h2: "Appartements avec piscine à Funchal",
+    label: "Votre logement", h2: "Appartements *avec piscine* à Funchal",
     lead: "Des appartements lumineux avec cuisine et balcons donnant sur la baie de Funchal. Dans la cour, une piscine avec transats sous des murs de basalte sombre. Nous accueillons aussi bien un voyageur seul qu’un groupe de 36 personnes : toute votre compagnie loge ensemble.",
     features: ["Piscine et terrasse ensoleillée", "Balcons avec vue sur l’océan et la ville", "Cuisine pour vos petits-déjeuners", "De 1 à 36 personnes ensemble"]
   },
   transfer: {
-    label: "Route et mer", h2: "Accueillis à l’aéroport. L’île vue de la mer.",
+    label: "Route et mer", h2: "Accueillis à l’aéroport. *L’île vue de la mer.*",
     busTitle: "Transferts", busBig: "2 × 18",
     bus: "Deux minibus de 18 places : un groupe jusqu’à 36 personnes voyage ensemble, en un seul trajet, sans taxi ni attente. Les mêmes minibus, avec chauffeur, vous emmènent à chaque excursion.",
     ticket: [["FNC", "Aéroport de Madère"], ["≈ 20 min", "trajet"], ["FUNCHAL", "vos appartements"]],
@@ -51,13 +51,13 @@ export default {
     yacht: "Un yacht pour 14 invités : les dauphins qui accompagnent souvent les bateaux au large de Madère, la baignade dans des criques au pied des falaises, le Cabo Girão vu de l’eau et un coucher de soleil avec un verre de madère. Les grands groupes embarquent à tour de rôle."
   },
   events: {
-    label: "Événements", h2: "Événements d’entreprise au cœur de Funchal",
+    label: "Événements", h2: "Événements d’entreprise *au cœur de* Funchal",
     lead: "Nous organisons soirées d’entreprise, anniversaires et fêtes pour votre groupe au centre de Funchal, à côté du centre commercial Plaza Madeira. Ajoutez les appartements, les transferts pour tous et une sortie en yacht : votre séminaire est prêt.",
     list: ["Dîner, banquet ou buffet", "Team building en montagne ou en mer", "Transferts pour tout le groupe", "Un programme pour chaque jour du séjour"],
     cta: "Préparer un événement"
   },
   book: {
-    label: "Réservation", h2: "Réservez votre voyage",
+    label: "Réservation", h2: "*Réservez* votre voyage",
     lead: "Indiquez vos dates et le nombre de personnes : nous répondrons avec une proposition personnalisée – itinéraire, hébergement, transferts et prix.",
     arrival: "Arrivée", departure: "Départ", guests: "Personnes", less: "Moins de personnes", more: "Plus de personnes",
     route: "Itinéraire", extras: "À organiser",
@@ -77,7 +77,7 @@ export default {
     msgTitle: "Demande de voyage à Madère", tgCopied: "Demande copiée. Collez-la dans la conversation Telegram."
   },
   faq: {
-    label: "Questions", h2: "Bon à savoir",
+    label: "Questions", h2: "Bon à *savoir*",
     items: [
       ["Comment aller à Madère depuis l’Europe ?", "Des vols directs relient de nombreuses villes européennes à l’aéroport international Cristiano Ronaldo de Madère (FNC) : environ 1 h 45 depuis Lisbonne et de 3 h 30 à 5 h depuis la plupart des capitales. Nous vous accueillons à la sortie du terminal, et Funchal est à environ 20 minutes."],
       ["Combien de personnes pouvez-vous accueillir ?", "D’un voyageur seul à un groupe de 36 personnes. Deux minibus de 18 places transportent tout le groupe ensemble, et le yacht accueille jusqu’à 14 invités par sortie : les groupes plus grands embarquent à tour de rôle."],
@@ -92,7 +92,7 @@ export default {
     ]
   },
   footer: {
-    h2: "Écrivez-nous", lead: "Écrivez-nous : nous vous aiderons pour les dates, l’itinéraire et tout ce dont le voyage a besoin.",
+    h2: "*Écrivez*-nous", lead: "Écrivez-nous : nous vous aiderons pour les dates, l’itinéraire et tout ce dont le voyage a besoin.",
     address: "Funchal, Madère, Portugal", phone: "Téléphone", addressLbl: "Adresse",
     creditsSummary: "Photos des lieux : Wikimedia Commons (CC BY / CC BY-SA). Données cartographiques © contributeurs d’OpenStreetMap.",
     creditsTitle: "Crédits photo", rights: "Tous droits réservés."

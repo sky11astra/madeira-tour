@@ -19,7 +19,7 @@ export default {
   addr: "Funchal · Madeira · Portugal",
   services: {
     label: "Rundum organisiert",
-    h2: "Sie fliegen ein. Um den Rest kümmern wir uns.",
+    h2: "Sie fliegen ein. *Um den Rest kümmern wir uns.*",
     lead: "Wir organisieren Ihren gesamten Urlaub auf Madeira: Wir holen Sie am Flughafen ab, bringen Sie unter, fahren Sie über die Insel, führen Sie in die Berge und nehmen Sie mit aufs Meer. Der Plan richtet sich nach Ihren Wünschen – ob Sonnenaufgang über den Wolken, Pool und gegrillter Fisch oder alles zusammen.",
     items: [
       ["1–36", "Gäste", "Unterkunft", "Apartments mit Pool in Funchal – für Alleinreisende, Familien oder Gruppen bis 36 Personen."],
@@ -29,21 +29,21 @@ export default {
       ["Zentrum", "von Funchal", "Firmenevents", "Firmenfeiern und Feste mitten in Funchal, direkt bei der Plaza Madeira."]
     ]
   },
-  places: { label: "Inselatlas", h2: "21 Orte, für die man nach Madeira fliegt", lead: "Wählen Sie, was Sie sehen möchten: Markierte Orte landen direkt in Ihrer Anfrage, und wir planen die Route darum herum.", counter: "auf Ihrer Liste", openPhoto: "Foto öffnen" },
+  places: { label: "Inselatlas", h2: "21 Orte, *für die man nach Madeira fliegt*", lead: "Wählen Sie, was Sie sehen möchten: Markierte Orte landen direkt in Ihrer Anfrage, und wir planen die Route darum herum.", counter: "auf Ihrer Liste", openPhoto: "Foto öffnen" },
   routes: {
-    label: "Routen", h2: "Vier Routen, in denen alles Platz hat",
+    label: "Routen", h2: "Vier Routen, in denen *alles Platz hat*",
     lead: "Wir haben die Orte so geordnet, dass Sie nie hin- und herfahren und jeden zur besten Tageszeit erleben. Jede Route passen wir an Sie an, und jeden Tag stimmen wir auf die Wettervorhersage ab, denn in den Bergen ändert sich das Wetter schnell.",
     day: "Tag", km: "km", why: "Warum diese Reihenfolge", choose: "Diese Route wählen", mapAria: "Routenkarte von Madeira",
     portoSanto: "Porto Santo ↗ ≈ 2,5 Std. mit der Fähre", desertas: "Desertas", funchal: "Funchal", custom: "Gemeinsam planen",
     length: "Dauer", pace: "Tempo", bestFor: "Ideal für", ocean: "Atlantischer Ozean"
   },
   stay: {
-    label: "Ihre Unterkunft", h2: "Apartments mit Pool in Funchal",
+    label: "Ihre Unterkunft", h2: "Apartments *mit Pool* in Funchal",
     lead: "Helle Apartments mit Küche und Balkonen mit Blick auf die Bucht von Funchal. Im Innenhof ein Pool mit Sonnenliegen vor Mauern aus dunklem Basalt. Wir beherbergen Alleinreisende ebenso wie Gruppen bis 36 Personen – so wohnt Ihre ganze Gesellschaft zusammen.",
     features: ["Pool und Sonnenterrasse", "Balkone mit Blick auf Ozean und Stadt", "Küche für das eigene Frühstück", "1 bis 36 Gäste zusammen"]
   },
   transfer: {
-    label: "Straße & Meer", h2: "Abgeholt am Flughafen. Die Insel vom Meer aus.",
+    label: "Straße & Meer", h2: "Abgeholt am Flughafen. *Die Insel vom Meer aus.*",
     busTitle: "Transfer", busBig: "2 × 18",
     bus: "Zwei Kleinbusse mit je 18 Sitzen: Eine Gruppe bis 36 Personen fährt gemeinsam in einer Fahrt – ohne Taxis und ohne Warten. Dieselben Kleinbusse mit Fahrer bringen Sie zu allen Ausflügen.",
     ticket: [["FNC", "Flughafen Madeira"], ["≈ 20 Min.", "Fahrt"], ["FUNCHAL", "Ihre Apartments"]],
@@ -51,13 +51,13 @@ export default {
     yacht: "Eine Yacht für 14 Gäste: Delfine, die Boote vor Madeira oft begleiten, Baden in Buchten unter den Klippen, Cabo Girão vom Wasser aus und ein Sonnenuntergang mit einem Glas Madeirawein. Größere Gruppen fahren abwechselnd hinaus."
   },
   events: {
-    label: "Firmenevents", h2: "Firmenevents mitten in Funchal",
+    label: "Firmenevents", h2: "Firmenevents *mitten in* Funchal",
     lead: "Wir organisieren Firmenabende, Jubiläen und Feiern für Ihre Gruppe im Zentrum von Funchal, direkt neben dem Einkaufszentrum Plaza Madeira. Dazu Apartments, Transfers für alle Gäste und ein Yachtausflug – und Ihr Team-Retreat ist fertig.",
     list: ["Dinner, Bankett oder Buffet", "Teambuilding in den Bergen oder auf See", "Transfers für die ganze Gruppe", "Programm für jeden Reisetag"],
     cta: "Event anfragen"
   },
   book: {
-    label: "Buchung", h2: "Reise buchen",
+    label: "Buchung", h2: "Reise *buchen*",
     lead: "Nennen Sie uns Reisedaten und Gruppengröße – wir antworten mit einem persönlichen Angebot: Route, Unterkunft, Transfers und Preis.",
     arrival: "Ankunft", departure: "Abreise", guests: "Gäste", less: "Weniger Gäste", more: "Mehr Gäste",
     route: "Route", extras: "Was wir organisieren",
@@ -77,7 +77,7 @@ export default {
     msgTitle: "Anfrage: Reise nach Madeira", tgCopied: "Anfrage kopiert. Fügen Sie sie im Telegram-Chat ein."
   },
   faq: {
-    label: "Fragen", h2: "Gut zu wissen",
+    label: "Fragen", h2: "Gut zu *wissen*",
     items: [
       ["Wie komme ich aus Europa nach Madeira?", "Direktflüge zum internationalen Flughafen Madeira Cristiano Ronaldo (FNC) starten in vielen europäischen Städten: ab Lissabon etwa 1 Std. 45 Min., ab den meisten Hauptstädten 3,5 bis 5 Stunden. Wir holen Sie am Ausgang des Terminals ab, bis Funchal sind es etwa 20 Minuten."],
       ["Wie viele Personen können Sie aufnehmen?", "Von einer Person bis zu einer Gruppe von 36 Gästen. Zwei Kleinbusse mit je 18 Sitzen bringen die ganze Gruppe gemeinsam ans Ziel, die Yacht nimmt bis zu 14 Gäste pro Fahrt mit – größere Gruppen fahren abwechselnd."],
@@ -92,7 +92,7 @@ export default {
     ]
   },
   footer: {
-    h2: "Schreiben Sie uns", lead: "Schreiben Sie uns – wir helfen mit Reisedaten, Route und allem, was die Reise braucht.",
+    h2: "*Schreiben* Sie uns", lead: "Schreiben Sie uns – wir helfen mit Reisedaten, Route und allem, was die Reise braucht.",
     address: "Funchal, Madeira, Portugal", phone: "Telefon", addressLbl: "Adresse",
     creditsSummary: "Fotos der Orte: Wikimedia Commons (CC BY / CC BY-SA). Kartendaten © OpenStreetMap-Mitwirkende.",
     creditsTitle: "Fotonachweis", rights: "Alle Rechte vorbehalten."

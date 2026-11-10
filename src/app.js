@@ -22,6 +22,8 @@ const plural = (n, f) => f[pr.select(n)] || f.other;
 const isOn = (c) => body.classList.contains(c);
 const lockScroll = () => { html.style.overflow = (isOn("lit") || isOn("menuopen") || isOn("gridview")) ? "hidden" : ""; };
 
+/*__WATER__*/
+
 /* ===== 3D: матриця повороту 3×3 (рядками) ===== */
 const rotX = (a) => { const c = Math.cos(a), s = Math.sin(a); return [1, 0, 0, 0, c, -s, 0, s, c]; };
 const rotY = (a) => { const c = Math.cos(a), s = Math.sin(a); return [c, 0, s, 0, 1, 0, -s, 0, c]; };
@@ -383,11 +385,28 @@ function flip(el, out) {
 const litCount = $("#litCount");
 let cur = null;
 shotImg.draggable = false;
+const litCv = document.createElement("canvas");
+litCv.className = "water"; litCv.setAttribute("aria-hidden", "true");
+shot.insertBefore(litCv, $(".xbtn", shot));
+let litW;
+const litTap = $("#litTap");
+function syncLit() {
+  const w = cur && cur.kind === "apt" && isOn("lit") && !reduce.matches ? D.apts[cur.idx].water : null;
+  if (!w) { litCv.classList.remove("on"); litTap.hidden = true; if (litW) litW.pause(); return; }
+  if (!shotImg.complete || !shotImg.naturalWidth) return;
+  if (litW === undefined) litW = makeWater(litCv);
+  if (!litW) return;
+  litW.set(shotImg, w); litW.play(); litCv.classList.add("on"); litTap.hidden = false;
+}
+shotImg.addEventListener("load", syncLit);
 function fill(kind, idx, el, t) {
+  litCv.classList.remove("on"); if (litW) litW.pause();
+  plate.style.setProperty("--r", kind === "apt" ? D.apts[idx].r : 1.5);
+  shotImg.style.objectPosition = kind === "apt" ? D.apts[idx].pos : "";
   if (kind === "sphere") {
     const s = S[idx], p = P[s.p], card = $(`.pcard[data-id="${p.id}"]`);
     litTitle.textContent = p.t;
-    litWhere.textContent = $(".parea", card).textContent;
+    litWhere.textContent = $(".parea", card).firstChild.textContent;
     litNote.textContent = $(".pstory", card).textContent;
     litFact.textContent = $(".pfact", card).lastChild.textContent;
     litCredit.innerHTML = `<a href="${s.page}" target="_blank" rel="noopener">${s.credit}</a>`;
@@ -417,7 +436,7 @@ function openShot(idx, el, kind = "sphere") {
   if (kind === "sphere" && el.classList.contains("card")) focused = idx;
   fill(kind, idx, el, t);
   body.classList.add("lit"); lit.setAttribute("aria-hidden", "false"); lockScroll();
-  lit.scrollTop = 0;
+  lit.scrollTop = 0; syncLit();
   if (!flip(el)) { plate.style.transition = plate.style.transform = plate.style.opacity = ""; }
   $(".xbtn", lit).focus({ preventScroll: true });
   neighbors();
@@ -442,7 +461,7 @@ function stepShot(d) {
   if (focused >= 0) focused = cur.idx;
   srcEl = cur.kind === "apt" ? $(`[data-apt="${cur.idx}"]`) : focused >= 0 ? cards[cur.idx].el : null;
   fill(cur.kind, cur.idx, null, ++token);
-  lit.scrollTop = 0; idleAt = performance.now();
+  lit.scrollTop = 0; idleAt = performance.now(); syncLit();
   neighbors();
 }
 function loadShot(el, small, full, t) {
@@ -472,7 +491,10 @@ function go(d) {
     setTimeout(() => { sliding = false; }, 340);
   }, 220);
 }
-let sw = null;
+let sw = null, swipedAt = 0;
+const litLive = () => litW && litCv.classList.contains("on");
+shot.addEventListener("click", (e) => { if (litLive() && !e.target.closest("button,a") && performance.now() - swipedAt > 350) litW.plopAt(e.clientX, e.clientY); });
+shot.addEventListener("pointermove", (e) => { if (litLive() && e.pointerType === "mouse" && !(sw && sw.on)) litW.trail(e.clientX, e.clientY); }, { passive: true });
 slide.addEventListener("pointerdown", (e) => {
   if (sliding || e.target.closest("button,a") || (e.pointerType === "mouse" && e.button !== 0)) return;
   sw = { id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, t: performance.now(), on: false };
@@ -495,6 +517,7 @@ const endSwipe = (e) => {
   const { dx, on, t } = sw;
   sw = null;
   if (!on) return;
+  swipedAt = performance.now();
   const v = Math.abs(dx) / Math.max(1, performance.now() - t);
   if (Math.abs(dx) > slide.offsetWidth * .2 || (Math.abs(dx) > 30 && v > .45)) go(dx < 0 ? 1 : -1);
   else { slide.style.transition = "transform .3s cubic-bezier(.22,.61,.36,1),opacity .3s ease"; slide.style.transform = ""; slide.style.opacity = ""; }
@@ -505,7 +528,7 @@ function closeShot(fromPop = false) {
   if (!isOn("lit")) return;
   if (!fromPop) dropOv("lit");
   focused = -1; token++; idleAt = performance.now();
-  body.classList.remove("lit"); lit.setAttribute("aria-hidden", "true");
+  body.classList.remove("lit"); lit.setAttribute("aria-hidden", "true"); syncLit();
   if (!(srcEl && document.contains(srcEl) && srcEl.offsetParent !== null && flip(srcEl, true))) plate.style.opacity = "0";
   closeTimer = setTimeout(() => { plate.style.transition = "none"; plate.style.transform = ""; plate.style.opacity = ""; resetSlide(); plate.offsetWidth; plate.style.transition = ""; }, 640);
   lockScroll();
@@ -513,7 +536,59 @@ function closeShot(fromPop = false) {
 }
 lit.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeShot(); });
 $$(".pimg").forEach((b) => b.addEventListener("click", () => openShot(+b.dataset.open, b)));
-$$("[data-apt]").forEach((b) => b.addEventListener("click", () => openShot(+b.dataset.apt, b, "apt")));
+$$("[data-apt]").forEach((b) => b.addEventListener("click", (e) => {
+  if (e.detail && b._w && b._w.plopAt(e.clientX, e.clientY)) return;
+  openShot(+b.dataset.apt, b, "apt");
+}));
+// Вода на плитках галереї: оживає, коли плитка на екрані, і зупиняється поза ним.
+function startTile(b) {
+  const img = $("img", b);
+  if (!img.complete || !img.naturalWidth) { img.addEventListener("load", () => startTile(b), { once: true }); return; }
+  if (b._w === undefined) {
+    const cv = document.createElement("canvas");
+    cv.className = "water"; cv.setAttribute("aria-hidden", "true");
+    b.appendChild(cv);
+    b._w = makeWater(cv);
+    if (!b._w) { cv.remove(); return; }
+    b._w.bg = true;
+    b._w.set(img, D.apts[+b.dataset.apt].water);
+    cv.classList.add("on");
+    const tap = $(".tap", b); if (tap) tap.hidden = false;
+    b.addEventListener("pointermove", (e) => { if (e.pointerType === "mouse") b._w.trail(e.clientX, e.clientY); }, { passive: true });
+  }
+  if (b._w) b._w.play();
+}
+if (!reduce.matches && window.WebGL2RenderingContext && window.IntersectionObserver) {
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) startTile(e.target); else if (e.target._w) e.target._w.pause(); }), { rootMargin: "80px" });
+  $$("[data-apt]").forEach((b) => { if ((D.apts[+b.dataset.apt].water || {}).tile) io.observe(b); });
+}
+
+/* ===== Шапка бере колір секції під нею; м'яка поява фото; зорі у футері ===== */
+const headIO = new IntersectionObserver((es) => {
+  es.forEach((e) => { if (e.isIntersecting) headIO.cur = e.target; else if (headIO.cur === e.target) headIO.cur = null; });
+  const s = headIO.cur;
+  body.classList.toggle("onlight", !!s && s.classList.contains("day"));
+  if (s) body.style.setProperty("--top", getComputedStyle(s).getPropertyValue("--bg"));
+}, { rootMargin: "-5% 0px -94% 0px" });
+$$(".sec").forEach((s) => headIO.observe(s));
+$$("img.lazy").forEach((im) => {
+  const show = () => im.classList.add("in");
+  if (im.complete && im.naturalWidth) show(); else { im.addEventListener("load", show, { once: true }); im.addEventListener("error", show, { once: true }); }
+});
+const fsky = $("#fsky");
+const paintFooterSky = () => {
+  const w = fsky.clientWidth, h = fsky.clientHeight, dpr = Math.min(2, devicePixelRatio || 1), r = rng(23);
+  fsky.width = Math.round(w * dpr); fsky.height = Math.round(h * dpr);
+  const g = fsky.getContext("2d");
+  g.scale(dpr, dpr);
+  for (let i = 0, n = Math.round(w * h / 2300); i < n; i++) {
+    const m = r(), s = m < .82 ? .45 + r() * .55 : m < .97 ? 1 + r() * .6 : 1.6 + r() * .7, k = r();
+    g.fillStyle = `rgba(${k < .7 ? "255,255,255" : k < .88 ? "198,218,255" : "255,234,208"},${(.25 + r() * .7).toFixed(2)})`;
+    g.beginPath(); g.arc(r() * w, r() * h, s, 0, 6.283); g.fill();
+  }
+};
+const skyIO = new IntersectionObserver(([e]) => { if (e.isIntersecting) { skyIO.disconnect(); paintFooterSky(); } }, { rootMargin: "400px" });
+skyIO.observe(fsky);
 
 /* ===== Меню і мови ===== */
 const menu = $("#menu"), menuBtn = $("#menuBtn"), langs = $(".langs");
@@ -692,6 +767,7 @@ function update(save = true) {
   $("#pRoute").textContent = D.routes[s.route] || "—";
   const bus = s.extras.includes("transfer") ? (s.g <= 18 ? 1 : 2) : 0;
   $("#pBuses").textContent = bus ? (s.g > 36 ? "2+" : bus) : "—";
+  $$("#seats i").forEach((el, i) => el.classList.toggle("on", i < s.g));
   $("#pSail").textContent = s.extras.includes("yacht") ? Math.ceil(s.g / 14) : "—";
   $("#pBig").hidden = s.g <= 36;
   if (save) store.set("mt-form", Object.fromEntries([...fields.map((f) => [f, form.elements[f].value]), ["route", s.route], ["extras", s.extras]]));

@@ -174,15 +174,30 @@ function jsonLd(lang) {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": g }).replace(/</g, "\\u003c");
 }
 
+/* ---------- Вода на фото басейну ----------
+   q — чотирикутник басейну на фото (ліво-верх, право-верх, право-низ, ліво-низ) у пікселях оригіналу;
+   p — точний контур води, якщо він не збігається з q; n — розмір сітки хвиль; d — сила заломлення;
+   l — світлотінь на хвилях; c — сонячні відблиски на дні; a — висота брижів; s — іскри сонця; z — висота вильоту бризок. */
+const WATER = {
+  pool: { q: [[113, 304], [398, 258], [613, 588], [93, 746]], n: [120, 170], d: 36, l: 6, c: 1, a: .022, s: .38, z: .55, tile: 1 },
+  "facade-pool": { q: [[-60, 776], [710, 792], [730, 1310], [-420, 1310]], p: [[122, 777], [684, 793], [690, 860], [697, 950], [700, 1100], [703, 1300], [-420, 1300], [-60, 790], [20, 803]], n: [130, 190], d: 20, l: 4, c: 0, a: .034, s: .85, z: 3.2, tile: 1, pos: "50% 100%" },
+  "courtyard-dusk": { q: [[1058, 726], [1225, 705], [1225, 779], [1058, 728]], n: [80, 30], d: 14, l: 3, c: 0, a: .05, s: .7, z: 1.5 }
+};
+
 /* ---------- Мінімізація ---------- */
 const caustics = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='520' height='520'><filter id='f' x='0' y='0' width='100%' height='100%'><feTurbulence type='turbulence' baseFrequency='0.0105 0.0145' numOctaves='2' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.66 0 0 0 0 1 0 0 0 0 0.94 0 0 0 -9 2.05'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>`).replace(/%2523/g, "%23");
 const minCss = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s*\n\s*/g, "").replace(/\s{2,}/g, " ").replace(/\s*([{};,>])\s*/g, "$1").replace(/;}/g, "}");
 const minJs = (s) => s.split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("//")).join("\n");
 const css = minCss(read("src/styles.css")).replace("__CAUSTICS__", `"data:image/svg+xml,${caustics}"`);
-const js = minJs(read("src/app.js"));
+const js = minJs(read("src/app.js").replace("/*__WATER__*/", () => read("src/water.js")));
+
+/* ---------- Контур острова для футера (кожна друга точка, бо він дрібний) ---------- */
+const [isleX, isleY] = proj(stops.funchal.lat, stops.funchal.lon);
+const isle = { h: MH, x: f1(isleX), y: f1(isleY), d: "M" + geo.madeira.filter((_, i) => i % 2 === 0).map(([lon, lat]) => proj(lat, lon).map(f1).join(",")).join("L") + "Z" };
+const WATER_HINT = { uk: "Торкніться води", en: "Touch the water", de: "Berühren Sie das Wasser", pl: "Dotknij wody", fr: "Touchez l’eau", ru: "Коснитесь воды" };
 
 /* ---------- Сторінки ---------- */
-const rel = (from, to) => (from.dir ? "../" : "") + to.dir || "./";
+const rel =(from, to) => (from.dir ? "../" : "") + to.dir || "./";
 mkdirSync(DIST, { recursive: true });
 for (const L of cfg.langs) {
   const lang = L.code, c = packs[lang], base = L.dir ? "../" : "", S = c.spots;
@@ -201,13 +216,22 @@ for (const L of cfg.langs) {
     places: places.map((p) => ({ id: p.id, t: S[p.id].t })),
     sphere: sph.map((s) => ({ p: s.pi, s: s.img.sphereSet, src: s.img.thumb, full: s.img.full,
       credit: `${c.photo}: ${s.img.ph.author} · ${s.img.ph.license}`, page: s.img.ph.page })),
-    apts: apts.map((a) => ({ t: c.apts[a.src], d: c.aptsText?.[a.src] || "", full: base + a.img.full, src: base + a.img.mid })),
-    aptWhere: c.stay.h2,
+    apts: apts.map((a) => {
+      const im = aptImgs[a.src], w = WATER[a.src];
+      return { t: c.apts[a.src], d: c.aptsText?.[a.src] || "", full: base + a.img.full, src: base + a.img.mid,
+        r: +Math.max(.72, Math.min(1.5, im.w / im.h)).toFixed(3), pos: w?.pos || "", water: w ? { ...w, w: im.w, h: im.h } : null };
+    }),
+    aptWhere: c.stay.h2.replace(/\*/g, ""),
     routes: Object.fromEntries([...routes.map((r) => [r.id, c.trips[r.id].name]), ["custom", c.routes.custom]]),
     i18n: { add: c.add, added: c.added, menuOpen: c.menuOpen, menuClose: c.menuClose, plural: c.plural, book: c.book },
     contacts: cfg.contacts, endpoint: cfg.formEndpoint
   }).replace(/</g, "\\u003c");
-  const html = render({ lang, c, cfg, base, places, routes, apts, mapSvg: mapSvg(c), jsonLd: jsonLd(lang), urls, css, js, data, credits, yacht, mainIdx, remote, pinName: PIN[lang] });
+  c.waterHint = WATER_HINT[lang];
+  const photoSet = (key) => { const im = imgFor(key, base); return { src: im.card, set: im.cardSet }; };
+  const poolF = aptImgs.pool.files;
+  const svc = [{ src: base + poolF["480"], set: `${base}${poolF["480"]} 480w, ${base}${poolF["960"]} 960w` }, photoSet("seixal"), photoSet("yacht"), photoSet("ruivo"), photoSet("oldtown_2")];
+  const doors = ["oldtown", "oldtown_2"].map(photoSet);
+  const html = render({ lang, c, cfg, base, places, routes, apts, mapSvg: mapSvg(c), jsonLd: jsonLd(lang), urls, css, js, data, credits, yacht, mainIdx, remote, pinName: PIN[lang], svc, doors, isle });
   const out = join(DIST, L.dir, "index.html");
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, html);

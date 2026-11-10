@@ -59,7 +59,7 @@ export default {
   "addr": "Funchal · Madeira · Portugal",
   "services": {
     "label": "Fully arranged",
-    "h2": "You fly in. We take care of the rest.",
+    "h2": "You fly in. *We take care of the rest.*",
     "lead": "We organise your whole stay on Madeira: we meet you at the airport, house you, drive you, guide you into the mountains and take you out to sea. The plan follows your wishes, whether that is a sunrise above the clouds, a pool and grilled fish, or all of it.",
     "items": [
       [
@@ -96,14 +96,14 @@ export default {
   },
   "places": {
     "label": "Island atlas",
-    "h2": "21 places worth the flight",
+    "h2": "21 places *worth the flight*",
     "lead": "Pick what you want to see. Places you mark go straight into your request, and we build the route around them.",
     "counter": "in your trip",
     "openPhoto": "Open photo"
   },
   "routes": {
     "label": "Itineraries",
-    "h2": "Four routes that fit it all in",
+    "h2": "Four routes that *fit it all in*",
     "lead": "We have ordered the places so you never drive back and forth, and see each one at its best hour. Any route can be changed for you, and each day is fine-tuned to the forecast, because mountain weather turns fast.",
     "day": "Day",
     "km": "km",
@@ -121,7 +121,7 @@ export default {
   },
   "stay": {
     "label": "Where you stay",
-    "h2": "Pool apartments in Funchal",
+    "h2": "*Pool* apartments in Funchal",
     "lead": "Bright apartments with kitchens and balconies looking over Funchal bay. In the courtyard, a pool with sun loungers beneath dark basalt walls. We host anything from a single traveller to a group of 36, so your whole party stays together.",
     "features": [
       "Pool and sun terrace",
@@ -132,7 +132,7 @@ export default {
   },
   "transfer": {
     "label": "Road & sea",
-    "h2": "Met at the airport. Shown the island from the sea.",
+    "h2": "Met at the airport. *Shown the island from the sea.*",
     "busTitle": "Transfers",
     "busBig": "2 × 18",
     "bus": "Two 18-seat minibuses: a group of up to 36 travels together in one run, with no taxis and no waiting. The same minibuses, with a driver, take you on every excursion.",
@@ -156,7 +156,7 @@ export default {
   },
   "events": {
     "label": "Events",
-    "h2": "Corporate events in the heart of Funchal",
+    "h2": "Corporate events *in the heart* of Funchal",
     "lead": "We host corporate evenings, anniversaries and parties for your group in central Funchal, next to the Plaza Madeira shopping centre. Add apartments, transfers for every guest and a yacht outing, and your team retreat is ready.",
     "list": [
       "Dinner, banquet or buffet",
@@ -168,7 +168,7 @@ export default {
   },
   "book": {
     "label": "Booking",
-    "h2": "Book your trip",
+    "h2": "*Book* your trip",
     "lead": "Tell us your dates and group size, and we will reply with a personal proposal: itinerary, accommodation, transfers and price.",
     "arrival": "Arrival",
     "departure": "Departure",
@@ -216,7 +216,7 @@ export default {
   },
   "faq": {
     "label": "Questions",
-    "h2": "Good to know",
+    "h2": "Good to *know*",
     "items": [
       [
         "How do I get to Madeira from Europe?",
@@ -261,7 +261,7 @@ export default {
     ]
   },
   "footer": {
-    "h2": "Get in touch",
+    "h2": "Get *in touch*",
     "lead": "Write to us in English or Ukrainian, and we will help with dates, the route and everything the trip needs.",
     "address": "Funchal, Madeira, Portugal",
     "phone": "Phone",

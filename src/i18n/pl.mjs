@@ -19,7 +19,7 @@ export default {
   addr: "Funchal · Madera · Portugalia",
   services: {
     label: "Pod klucz",
-    h2: "Ty przylatujesz. Resztą zajmujemy się my.",
+    h2: "Ty przylatujesz. *Resztą zajmujemy się my.*",
     lead: "Organizujemy cały Twój wypoczynek na Maderze: odbieramy Cię z lotniska, kwaterujemy, wozimy, prowadzimy w góry i zabieramy w morze. Plan układamy według Twoich życzeń – wschód słońca nad chmurami, basen i ryba z grilla albo wszystko naraz.",
     items: [
       ["1–36", "osób", "Zakwaterowanie", "Apartamenty z basenem w Funchal – dla jednej osoby, rodziny lub grupy do 36 osób."],
@@ -29,21 +29,21 @@ export default {
       ["Centrum", "Funchal", "Imprezy firmowe", "Imprezy firmowe i uroczystości w samym centrum Funchal, tuż przy Plaza Madeira."]
     ]
   },
-  places: { label: "Atlas wyspy", h2: "21 miejsc, dla których leci się na Maderę", lead: "Wybierz, co chcesz zobaczyć: zaznaczone miejsca trafią prosto do Twojego zapytania, a my ułożymy wokół nich trasę.", counter: "w Twojej podróży", openPhoto: "Otwórz zdjęcie" },
+  places: { label: "Atlas wyspy", h2: "21 miejsc, *dla których leci się na Maderę*", lead: "Wybierz, co chcesz zobaczyć: zaznaczone miejsca trafią prosto do Twojego zapytania, a my ułożymy wokół nich trasę.", counter: "w Twojej podróży", openPhoto: "Otwórz zdjęcie" },
   routes: {
-    label: "Trasy", h2: "Cztery trasy, w których zdążysz wszystko",
+    label: "Trasy", h2: "Cztery trasy, w których *zdążysz wszystko*",
     lead: "Ułożyliśmy miejsca tak, żeby nie trzeba było jeździć tam i z powrotem, a każde zobaczyć o najlepszej porze dnia. Każdą trasę dopasujemy do Ciebie, a plan dnia potwierdzamy według prognozy – w górach pogoda zmienia się szybko.",
     day: "Dzień", km: "km", why: "Dlaczego właśnie tak", choose: "Wybierz tę trasę", mapAria: "Mapa trasy po Maderze",
     portoSanto: "Porto Santo ↗ ≈ 2,5 h promem", desertas: "Desertas", funchal: "Funchal", custom: "Ułóżmy razem",
     length: "Czas trwania", pace: "Tempo", bestFor: "Dla kogo", ocean: "Ocean Atlantycki"
   },
   stay: {
-    label: "Gdzie zamieszkasz", h2: "Apartamenty z basenem w Funchal",
+    label: "Gdzie zamieszkasz", h2: "Apartamenty *z basenem* w Funchal",
     lead: "Jasne apartamenty z kuchnią i balkonami z widokiem na zatokę Funchal. Na dziedzińcu basen z leżakami pod murami z ciemnego bazaltu. Przyjmujemy zarówno jedną osobę, jak i grupę do 36 osób – całe towarzystwo mieszka razem.",
     features: ["Basen i taras słoneczny", "Balkony z widokiem na ocean i miasto", "Kuchnia na własne śniadania", "Od 1 do 36 osób razem"]
   },
   transfer: {
-    label: "Droga i morze", h2: "Odbierzemy z lotniska. Pokażemy wyspę od strony morza.",
+    label: "Droga i morze", h2: "Odbierzemy z lotniska. *Pokażemy wyspę od strony morza.*",
     busTitle: "Transfer", busBig: "2 × 18",
     bus: "Dwa busy po 18 miejsc: grupa do 36 osób jedzie razem, jednym kursem, bez taksówek i czekania. Te same busy z kierowcą wożą Cię na wszystkie wycieczki.",
     ticket: [["FNC", "Lotnisko Madera"], ["≈ 20 min", "dojazd"], ["FUNCHAL", "Twoje apartamenty"]],
@@ -51,13 +51,13 @@ export default {
     yacht: "Jacht dla 14 gości: delfiny, które często towarzyszą łodziom u wybrzeży Madery, kąpiele w zatoczkach pod klifami, Cabo Girão od strony wody i zachód słońca z kieliszkiem madery. Większe grupy wypływają na zmianę."
   },
   events: {
-    label: "Imprezy firmowe", h2: "Imprezy firmowe w samym sercu Funchal",
+    label: "Imprezy firmowe", h2: "Imprezy firmowe *w samym sercu* Funchal",
     lead: "Organizujemy wieczory firmowe, jubileusze i przyjęcia dla Twojej grupy w centrum Funchal, tuż obok centrum handlowego Plaza Madeira. Dodaj apartamenty, transfer dla wszystkich gości i rejs jachtem – i wyjazd integracyjny gotowy.",
     list: ["Kolacja, bankiet lub bufet", "Integracja w górach lub na morzu", "Transfer dla całej grupy", "Program na każdy dzień wyjazdu"],
     cta: "Zaplanuj imprezę"
   },
   book: {
-    label: "Rezerwacja", h2: "Zarezerwuj podróż",
+    label: "Rezerwacja", h2: "*Zarezerwuj* podróż",
     lead: "Podaj daty i liczbę osób – odpowiemy spersonalizowaną ofertą: trasa, zakwaterowanie, transfery i cena.",
     arrival: "Przylot", departure: "Wylot", guests: "Liczba osób", less: "Mniej osób", more: "Więcej osób",
     route: "Trasa", extras: "Co zorganizować",
@@ -77,7 +77,7 @@ export default {
     msgTitle: "Zapytanie o podróż na Maderę", tgCopied: "Treść zapytania skopiowana – wklej ją w czacie Telegram."
   },
   faq: {
-    label: "Pytania", h2: "Warto wiedzieć",
+    label: "Pytania", h2: "Warto *wiedzieć*",
     items: [
       ["Jak dostać się na Maderę z Europy?", "Bezpośrednie loty na międzynarodowe lotnisko Madery im. Cristiano Ronaldo (FNC) startują z wielu miast Europy: z Lizbony lot trwa około 1 h 45 min, z większości stolic od 3,5 do 5 godzin. Odbieramy Cię przy wyjściu z terminalu, a do Funchal jedzie się około 20 minut."],
       ["Ile osób możecie przyjąć?", "Od jednej osoby do grupy 36 osób. Dwa busy po 18 miejsc wiozą całą grupę razem, a jacht zabiera do 14 gości na jeden rejs – większe grupy płyną na zmianę."],
@@ -92,7 +92,7 @@ export default {
     ]
   },
   footer: {
-    h2: "Napisz do nas", lead: "Napisz – pomożemy z terminem, trasą i wszystkim, czego potrzeba na wyjazd.",
+    h2: "*Napisz* do nas", lead: "Napisz – pomożemy z terminem, trasą i wszystkim, czego potrzeba na wyjazd.",
     address: "Funchal, Madera, Portugalia", phone: "Telefon", addressLbl: "Adres",
     creditsSummary: "Zdjęcia miejsc: Wikimedia Commons (CC BY / CC BY-SA). Dane mapy © współtwórcy OpenStreetMap.",
     creditsTitle: "Autorzy zdjęć", rights: "Wszelkie prawa zastrzeżone."
